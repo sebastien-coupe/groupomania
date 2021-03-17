@@ -1,8 +1,8 @@
+require('dotenv').config();
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-require('dotenv').config();
 
 exports.signup = async ctx => {
   const { email, password } = ctx.request.body;
