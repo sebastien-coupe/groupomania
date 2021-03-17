@@ -2,10 +2,10 @@ const Koa = require('koa');
 
 const app = new Koa();
 
-app.use(async ctx => {
-  ctx.body = {
-    message: "Hello, world"
-  }
-});
+const authRouter = require('./routes/authRoutes');
+
+app
+  .use(authRouter.routes())
+  .use(authRouter.allowedMethods());
 
 module.exports = app;
