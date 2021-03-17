@@ -4,8 +4,10 @@ module.exports = async (ctx, next) => {
   } catch (error) {
     ctx.status = error.status || 500;
     ctx.body = {
-      status: 'Error',
-      message: error.message
+      error: {
+        code: error.status,
+        message: error.message
+      }
     }
   }
 }
