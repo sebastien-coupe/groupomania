@@ -1,13 +1,62 @@
+const { User } = require('../models');
+const bcrypt = require('bcrypt');
+
 exports.signup = async ctx => {
-  console.log(ctx.request.body);
-  ctx.body = {
-    message: "Successfully registred"
+  const { email, password } = ctx.request.body;
+
+  if (!email || !password) ctx.throw(400, 'Invalid Credentials');
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await User.create({
+      email,
+      password: hashedPassword
+    });
+
+    console.log(user)
+
+    if (user) {
+      ctx.status = 201
+      ctx.body = {
+        status: 'success',
+        message: 'Registration Success'
+      }
+    }
+  } catch (error) {
+    // Status code to be changed ?
+    ctx.throw(409, 'Email already registered');
   }
 }
 
 exports.signin = async ctx => {
-  console.log(ctx.request.body);
-  ctx.body = {
-    message: "Successfully authenticated"
+  const { email, password } = ctx.request.body;
+
+  if (!email || !password) ctx.throw(400, 'Invalid Credentials');
+
+  try {
+    const user = await User.findOne({
+      where: {
+        email
+      }
+    });
+
+    if (!user) {
+      return ctx.throw(401, 'Invalid Credentials');
+    }
+
+    const isValidPassword = await bcrypt.compare(password, user.password);
+
+    if (!isValidPassword) {
+      return ctx.throw(401, 'Invalid Credentials')
+    }
+
+    ctx.body = {
+      userId: user.uuid,
+      token: 'TOKEN'
+    }
+
+  } catch (error) {
+    return ctx.throw(500, error.message);
   }
 }
