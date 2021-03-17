@@ -1,5 +1,8 @@
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+require('dotenv').config();
 
 exports.signup = async ctx => {
   const { email, password } = ctx.request.body;
@@ -13,8 +16,6 @@ exports.signup = async ctx => {
       email,
       password: hashedPassword
     });
-
-    console.log(user)
 
     if (user) {
       ctx.status = 201
@@ -53,10 +54,14 @@ exports.signin = async ctx => {
 
     ctx.body = {
       userId: user.uuid,
-      token: 'TOKEN'
+      token: jwt.sign(
+        { userId: user.uuid },
+        process.env.TOKEN_SALT,
+        { expiresIn: '24h' }
+      )
     }
 
   } catch (error) {
-    return ctx.throw(500, error.message);
+    ctx.throw(500, error.message);
   }
 }
