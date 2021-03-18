@@ -3,11 +3,13 @@ const { User } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+const validator = require('validator');
 
 exports.signup = async ctx => {
   const { email, password } = ctx.request.body;
 
-  if (!email || !password) ctx.throw(400, 'Invalid Credentials');
+  if (!email || !validator.isEmail(email)) ctx.throw(422, 'Email is not valid');
+  if (!password || !validator.isLength(password, { min: 6 })) ctx.throw(422, 'Password is too short');
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
