@@ -4,7 +4,9 @@ const errorHandler = require('./middlewares/errorHandlerMiddleware');
 
 const app = new Koa();
 
+// Routers
 const authRouter = require('./routes/authRoutes');
+const postRouter = require('./routes/postRoutes');
 
 app.use(bodyParser());
 app.use(errorHandler);
@@ -20,5 +22,9 @@ app.use(async (ctx, next) => {
 app
   .use(authRouter.routes())
   .use(authRouter.allowedMethods());
+
+app
+  .use(postRouter.routes())
+  .use(postRouter.allowedMethods());
 
 module.exports = app;
