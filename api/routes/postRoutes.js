@@ -2,39 +2,16 @@ const router = require('@koa/router')({
   prefix: '/api/posts'
 });
 
-router.get('/', async ctx => {
-  ctx.body = {
-    status: 'success',
-    message: 'Fetch all posts'
-  }
-});
+const postController = require('../controllers/postController');
 
-router.get('/:uuid', async ctx => {
-  ctx.body = {
-    status: 'success',
-    message: `Fetch post identified by ${ctx.params.uuid} uuid`
-  }
-});
+router.get('/', postController.findAll);
 
-router.post('/', async ctx => {
-  ctx.body = {
-    status: 'success',
-    message: 'Create a new post'
-  }
-});
+router.get('/:uuid', postController.findOne);
 
-router.put('/:uuid', async ctx => {
-  ctx.body = {
-    status: 'success',
-    message: `Update post identified by ${ctx.params.uuid} uuid`
-  }
-});
+router.post('/', postController.create);
 
-router.del('/:uuid', async ctx => {
-  ctx.body = {
-    status: 'success',
-    message: `Delete post identified by ${ctx.params.uuid} uuid`
-  }
-});
+router.put('/:uuid', postController.update);
+
+router.del('/:uuid', postController.delete);
 
 module.exports = router;
