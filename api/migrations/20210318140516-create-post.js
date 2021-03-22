@@ -8,6 +8,10 @@ module.exports = {
         primaryKey: true,
         type: DataTypes.INTEGER
       },
+      uuid: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4
+      },
       body: {
         allowNull: false,
         type: DataTypes.TEXT
@@ -17,7 +21,7 @@ module.exports = {
       },
       userId: {
         allowNull: false,
-        type: DataTypes.INTEGER
+        type: DataTypes.UUID
       },
       createdAt: {
         allowNull: false,
