@@ -5,30 +5,38 @@ const jwt = require('jsonwebtoken');
 
 const validator = require('validator');
 
+const passwordOptions = {
+  minLength: 8,
+  minLowercase: 1,
+  minUppercase: 1,
+  minNumbers: 1,
+  minSymbols: 0
+}
+
 exports.signup = async ctx => {
   const { email, password } = ctx.request.body;
 
   if (!email || !validator.isEmail(email)) ctx.throw(422, 'Email is not valid');
-  if (!password || !validator.isLength(password, { min: 6 })) ctx.throw(422, 'Password is too short');
+  if (!password || !validator.isStrongPassword(password, passwordOptions)) ctx.throw(422, 'Password is too weak');
 
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await User.create({
+  const [user, created] = await User.findOrCreate({
+    where: {
+      email
+    },
+    defaults: {
       email,
       password: hashedPassword
-    });
-
-    if (user) {
-      ctx.status = 201
-      ctx.body = {
-        status: 'success',
-        message: 'Registration Success'
-      }
     }
-  } catch (error) {
-    // Status code to be changed ?
-    ctx.throw(409, 'Email already registered');
+  });
+
+  if (!created) ctx.throw(409, 'Email address already used')
+
+  ctx.status = 201
+  ctx.body = {
+    status: 'success',
+    message: 'Registration Success'
   }
 }
 
@@ -37,33 +45,28 @@ exports.signin = async ctx => {
 
   if (!email || !password) ctx.throw(400, 'Invalid Credentials');
 
-  try {
-    const user = await User.findOne({
-      where: {
-        email
-      }
-    });
-
-    if (!user) {
-      return ctx.throw(401, 'Invalid Credentials');
+  const user = await User.findOne({
+    where: {
+      email
     }
+  });
 
-    const isValidPassword = await bcrypt.compare(password, user.password);
+  if (!user) {
+    return ctx.throw(401, 'Invalid Credentials');
+  }
 
-    if (!isValidPassword) {
-      return ctx.throw(401, 'Invalid Credentials')
-    }
+  const isValidPassword = await bcrypt.compare(password, user.password);
 
-    ctx.body = {
-      userId: user.uuid,
-      token: jwt.sign(
-        { userId: user.uuid },
-        process.env.TOKEN_SALT,
-        { expiresIn: '24h' }
-      )
-    }
+  if (!isValidPassword) {
+    return ctx.throw(401, 'Invalid Credentials')
+  }
 
-  } catch (error) {
-    ctx.throw(500, error.message);
+  ctx.body = {
+    userId: user.uuid,
+    token: jwt.sign(
+      { userId: user.uuid },
+      process.env.TOKEN_SALT,
+      { expiresIn: '24h' }
+    )
   }
 }
