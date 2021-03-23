@@ -17,6 +17,8 @@
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",
+    "koa-mount": "^4.0.0",
+    "koa-static": "^5.0.0",
     "mysql2": "^2.2.5",
     "sequelize": "^6.5.1",
     "validator": "^13.5.1"

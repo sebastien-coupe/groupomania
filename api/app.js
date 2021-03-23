@@ -1,4 +1,7 @@
 const Koa = require('koa');
+const serve = require('koa-static');
+const path = require('path');
+const mount = require('koa-mount');
 const bodyParser = require('koa-bodyparser');
 const errorHandler = require('./middlewares/errorHandlerMiddleware');
 
@@ -8,8 +11,10 @@ const app = new Koa();
 const authRouter = require('./routes/authRoutes');
 const postRouter = require('./routes/postRoutes');
 
-app.use(bodyParser());
 app.use(errorHandler);
+app.use(bodyParser());
+
+app.use(mount('/public', serve(path.join(__dirname, '/public'))));
 
 // Prevent cors errors
 app.use(async (ctx, next) => {
