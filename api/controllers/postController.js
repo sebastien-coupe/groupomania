@@ -1,4 +1,5 @@
 const { Post } = require('../models');
+const fs = require('fs/promises');
 
 exports.findAll = async ctx => {
   const posts = await Post.findAll();
@@ -27,14 +28,16 @@ exports.findOne = async ctx => {
 }
 
 exports.create = async ctx => {
-  const { body, imageUrl, userId } = ctx.request.body;
+  const { body, userId } = ctx.request.body;
+
+  const imageUrl = ctx.file ? `${ctx.protocol}://${ctx.host}/${ctx.file.path}` : '';
 
   if (!body || !userId) ctx.throw(400, 'Request is not valid')
 
   const createdPost = await Post.create({
     body,
-    imageUrl,
-    userId
+    userId,
+    imageUrl
   });
 
   if (!createdPost) ctx.throw(500, 'Database error saving new post')
@@ -47,7 +50,17 @@ exports.create = async ctx => {
 }
 
 exports.update = async ctx => {
-  const body = ctx.request.body;
+  const imageUrl = ctx.file ? `${ctx.protocol}://${ctx.host}/${ctx.file.path}` : '';
+
+  if (!ctx.file && !ctx.request.body) ctx.throw(400, 'Cannot update without content')
+
+  const body = imageUrl ? {
+    ...ctx.request.body,
+    imageUrl
+  } : {
+    ...ctx.request.body
+  };
+
   const { uuid } = ctx.params;
 
   if (!Object.keys(body).length) ctx.throw(400, 'Request is not valid');
@@ -71,6 +84,18 @@ exports.update = async ctx => {
 
 exports.delete = async ctx => {
   const { uuid } = ctx.params;
+
+  const postToDelete = await Post.findOne({
+    where: {
+      uuid
+    }
+  });
+
+  const associatedImageFile = postToDelete.imageUrl ? postToDelete.imageUrl.split('/uploads/')[1] : null;
+
+  if (associatedImageFile) {
+    await fs.unlink(`public/uploads/${associatedImageFile}`);
+  }
 
   const deletedPost = await Post.destroy({
     where: {
