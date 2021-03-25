@@ -1,4 +1,5 @@
 const multer = require('@koa/multer');
+const fs = require('fs');
 
 const MIME_TYPES = {
   'image/jpg': 'jpg',
@@ -8,7 +9,10 @@ const MIME_TYPES = {
 
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, 'public/uploads');
+    const dir = 'public/uploads';
+    // Create dir if not exists
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+    callback(null, dir);
   },
   filename: (req, file, callback) => {
     // Get name of the file such as "name.ext" becomes "name"
