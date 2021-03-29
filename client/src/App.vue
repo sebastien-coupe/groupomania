@@ -1,9 +1,13 @@
 <template>
-  <div>
+  <div class="d-flex flex-column min-vh-100">
     <Navbar />
-    <div class="container">
-      <router-view />
-    </div>
+    <section class="flex-grow-1">
+      <div class="container">
+        <div class="mt-4">
+          <router-view />
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
