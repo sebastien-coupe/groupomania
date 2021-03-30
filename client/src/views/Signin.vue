@@ -9,37 +9,19 @@
             alt="groupomania logo"
           />
           <p class="fs-5 mb-4">
-            N'attendez plus pour vous inscrire et commencez à échanger dès à
-            présent avec vos collaborateurs.
+            Restez informé de ce qui se passe dans l'entreprise, pour une
+            collaboration efficace et conviviale.
           </p>
           <p>
-            Déjà inscrit(e)s ?
-            <router-link :to="{ name: 'Signin' }" class="ms-2"
-              >Se connecter</router-link
+            Nouveau chez Groupomania ?
+            <router-link :to="{ name: 'Signup' }" class="ms-2"
+              >S'inscrire</router-link
             >
           </p>
         </div>
         <div class="col-6">
           <div class="card shadow-sm ms-5 p-5">
             <form action="">
-              <div class="mb-2">
-                <label for="lastname" class="form-label">Nom</label>
-                <input
-                  type="text"
-                  id="lastname"
-                  name="lastname"
-                  class="form-control form-control-lg"
-                />
-              </div>
-              <div class="mb-2">
-                <label for="firstname" class="form-label">Prénom</label>
-                <input
-                  type="text"
-                  id="firstname"
-                  name="firstname"
-                  class="form-control form-control-lg"
-                />
-              </div>
               <div class="mb-2">
                 <label for="email" class="form-label">Adresse email</label>
                 <input
@@ -60,7 +42,7 @@
               </div>
               <div class="d-grid">
                 <button type="submit" class="btn btn-success btn-lg">
-                  Inscription
+                  Connexion
                 </button>
               </div>
             </form>
@@ -74,6 +56,3 @@
 <script>
 export default {};
 </script>
-
-<style>
-</style>
