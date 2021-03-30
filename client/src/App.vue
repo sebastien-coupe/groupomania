@@ -1,12 +1,8 @@
 <template>
   <div class="d-flex flex-column min-vh-100">
-    <Navbar />
-    <section class="flex-grow-1">
-      <div class="container">
-        <div class="mt-4">
-          <router-view />
-        </div>
-      </div>
+    <Navbar v-if="isAuthenticated" />
+    <section class="d-flex flex-column flex-grow-1">
+      <router-view />
     </section>
   </div>
 </template>
@@ -15,6 +11,12 @@
 import Navbar from '@/components/TheNavbar';
 
 export default {
+  data() {
+    return {
+      // To refactor using vuex
+      isAuthenticated: false,
+    };
+  },
   components: {
     Navbar,
   },
