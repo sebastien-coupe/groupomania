@@ -4,11 +4,13 @@
     <section class="d-flex flex-column flex-grow-1">
       <router-view />
     </section>
+    <Footer />
   </div>
 </template>
 
 <script>
 import Navbar from '@/components/TheNavbar';
+import Footer from '@/components/TheFooter';
 
 export default {
   data() {
@@ -19,6 +21,7 @@ export default {
   },
   components: {
     Navbar,
+    Footer,
   },
 };
 </script>
