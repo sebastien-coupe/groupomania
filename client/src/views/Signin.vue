@@ -9,8 +9,8 @@
             alt="groupomania logo"
           />
           <p class="fs-5 mb-4">
-            Restez informé de ce qui se passe dans l'entreprise, pour une
-            collaboration efficace et conviviale.
+            Connectez vous au plus vite plus pour consulter les dernières
+            nouvelles.
           </p>
           <p>
             Nouveau chez Groupomania ?
@@ -21,24 +21,61 @@
         </div>
         <div class="col-6">
           <div class="card shadow-sm ms-5 p-5">
-            <form action="">
+            <div
+              v-if="showSuccessMessage"
+              class="alert alert-success mb-3"
+              role="alert"
+            >
+              Inscription réussie !
+            </div>
+            <div
+              v-if="showErrorMessage"
+              class="alert alert-danger mb-3"
+              role="alert"
+            >
+              Identifiants incorrects
+            </div>
+
+            <form @submit.prevent="submitForm">
               <div class="mb-2">
                 <label for="email" class="form-label">Adresse email</label>
                 <input
+                  @focus="
+                    {
+                      {
+                        delete errors.email;
+                        showErrorMessage = false;
+                      }
+                    }
+                  "
                   type="email"
                   id="email"
-                  name="email"
+                  v-model="email"
                   class="form-control form-control-lg"
                 />
+                <span v-if="errors.email" class="small text-danger">{{
+                  errors.email
+                }}</span>
               </div>
               <div class="mb-4">
                 <label for="password" class="form-label">Mot de passe</label>
                 <input
+                  @focus="
+                    {
+                      {
+                        delete errors.password;
+                        showErrorMessage = false;
+                      }
+                    }
+                  "
                   type="password"
                   id="password"
-                  name="password"
+                  v-model="password"
                   class="form-control form-control-lg"
                 />
+                <span v-if="errors.password" class="small text-danger">{{
+                  errors.password
+                }}</span>
               </div>
               <div class="d-grid">
                 <button type="submit" class="btn btn-success btn-lg">
@@ -54,5 +91,71 @@
 </template>
 
 <script>
-export default {};
+export default {
+  inject: ['API_URL'],
+
+  data() {
+    return {
+      email: '',
+      password: '',
+      showSuccessMessage: false,
+      showErrorMessage: false,
+      errors: {},
+    };
+  },
+
+  methods: {
+    async submitForm() {
+      if (!this.validateForm()) return;
+
+      const data = {
+        email: this.email,
+        password: this.password,
+      };
+
+      const connectUser = await fetch(`${this.API_URL}/auth/signin`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await connectUser.json();
+
+      if (result.error) {
+        this.showErrorMessage = true;
+      }
+
+      this.$router.push({ name: 'Home' });
+    },
+
+    validateForm() {
+      this.errors = {};
+
+      if (this.email.length === 0) {
+        this.errors.email = 'Une adresse mail est requise';
+      }
+
+      if (this.password.length === 0) {
+        this.errors.password = 'Un mot de passe est requis';
+      }
+
+      return Object.keys(this.errors).length === 0;
+    },
+  },
+
+  mounted() {
+    if (this.$route.query.email) {
+      this.email = this.$route.query.email;
+      this.showSuccessMessage = true;
+    }
+  },
+};
 </script>
+
+<style>
+.overlay {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+</style>
