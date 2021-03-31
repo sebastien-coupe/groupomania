@@ -5,21 +5,13 @@ const jwt = require('jsonwebtoken');
 
 const validator = require('validator');
 
-const passwordOptions = {
-  minLength: 8,
-  minLowercase: 1,
-  minUppercase: 1,
-  minNumbers: 1,
-  minSymbols: 0
-}
-
 exports.signup = async ctx => {
   const { lastname, firstname, email, password } = ctx.request.body;
 
   if (!lastname) ctx.throw(422, 'Lastname cannot be empty')
   if (!firstname) ctx.throw(422, 'Firstname cannot be empty')
   if (!email || !validator.isEmail(email)) ctx.throw(422, 'Email is not valid');
-  if (!password || !validator.isStrongPassword(password, passwordOptions)) ctx.throw(422, 'Password is too weak');
+  if (!password || !validator.isLength(password, { min: 8 })) ctx.throw(422, 'Password is too weak');
 
 
   const hashedPassword = await bcrypt.hash(password, 10);
