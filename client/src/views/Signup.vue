@@ -21,7 +21,7 @@
         </div>
         <div class="col-6">
           <div class="card shadow-sm ms-5 p-5">
-            <form @submit.prevent="submitForm">
+            <form @submit.prevent="submitForm" novalidate>
               <div class="mb-2">
                 <label for="lastname" class="form-label">Nom</label>
                 <input
@@ -114,6 +114,8 @@
 </template>
 
 <script>
+import validator from 'validator';
+
 export default {
   inject: ['API_URL'],
 
@@ -153,6 +155,7 @@ export default {
         return;
       }
 
+      // If no error, redirect to signin page
       this.$router.push({ name: 'Signin', query: { email: this.email } });
     },
 
@@ -177,6 +180,10 @@ export default {
 
       if (this.email.length === 0) {
         this.errors.email = 'Une adresse mail est requise';
+      }
+
+      if (!validator.isEmail(this.email)) {
+        this.errors.email = 'Adresse mail non valide';
       }
 
       if (this.password.length === 0) {
