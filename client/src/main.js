@@ -5,6 +5,8 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './main.css';
 
-createApp(App)
-  .use(router)
-  .mount('#app')
+const app = createApp(App).use(router);
+
+app.provide('API_URL', 'http://localhost:3000/api');
+
+app.mount('#app');
