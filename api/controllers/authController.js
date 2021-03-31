@@ -14,10 +14,13 @@ const passwordOptions = {
 }
 
 exports.signup = async ctx => {
-  const { email, password } = ctx.request.body;
+  const { lastname, firstname, email, password } = ctx.request.body;
 
+  if (!lastname) ctx.throw(422, 'Lastname cannot be empty')
+  if (!firstname) ctx.throw(422, 'Firstname cannot be empty')
   if (!email || !validator.isEmail(email)) ctx.throw(422, 'Email is not valid');
   if (!password || !validator.isStrongPassword(password, passwordOptions)) ctx.throw(422, 'Password is too weak');
+
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -26,6 +29,8 @@ exports.signup = async ctx => {
       email
     },
     defaults: {
+      lastName: lastname,
+      firstName: firstname,
       email,
       password: hashedPassword
     }
