@@ -3,7 +3,7 @@ const fs = require('fs/promises');
 
 exports.findAll = async ctx => {
   const posts = await Post.findAll({
-    include: User
+    include: 'author'
   });
 
   ctx.body = {
@@ -18,7 +18,8 @@ exports.findOne = async ctx => {
   const post = await Post.findOne({
     where: {
       uuid
-    }
+    },
+    include: 'author'
   });
 
   if (!post) ctx.throw(404, 'No post matching uuid');
