@@ -125,8 +125,13 @@ export default {
 
       if (result.error) {
         this.showErrorMessage = true;
+        return;
       }
 
+      // Make user connexion persistent
+      await this.$store.dispatch('login', result);
+
+      // Redirect to home page
       this.$router.push({ name: 'Home' });
     },
 

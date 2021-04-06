@@ -155,7 +155,7 @@ export default {
         return;
       }
 
-      // If no error, redirect to signin page
+      // Redirect to signin signin page with email as query parameter
       this.$router.push({ name: 'Signin', query: { email: this.email } });
     },
 
