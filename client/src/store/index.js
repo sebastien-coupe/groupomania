@@ -23,12 +23,12 @@ export default createStore({
     }
   },
   actions: {
-    login(context, { token, userId }) {
+    login(context, { token, uid }) {
       context.commit('setToken', token)
-      context.commit('setUserId', userId)
+      context.commit('setUserId', uid)
 
       localStorage.setItem('token', token)
-      localStorage.setItem('userId', userId)
+      localStorage.setItem('userId', uid)
     },
 
     logout(context) {
