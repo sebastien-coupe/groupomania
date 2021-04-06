@@ -131,8 +131,8 @@ export default {
       // Make user connexion persistent
       await this.$store.dispatch('login', result);
 
-      // Redirect to home page
-      this.$router.push({ name: 'Home' });
+      // Redirect to feed page
+      this.$router.push({ name: 'Feed' });
     },
 
     validateForm() {

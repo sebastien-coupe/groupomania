@@ -1,14 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import store from '../store'
-import Home from '../views/Home.vue'
+import Feed from '../views/Feed.vue'
 import Signup from '../views/Signup.vue'
 import Signin from '../views/Signin.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    name: 'Feed',
+    component: Feed,
     meta: {
       requiresAuth: true
     }
