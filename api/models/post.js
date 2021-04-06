@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'userId'
       })
     }
+
+    toJSON() {
+      return { ...this.get(), id: undefined }
+    }
   };
   Post.init({
     uuid: {
@@ -27,9 +31,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     imageUrl: {
       type: DataTypes.STRING
-    },
-    userId: {
-      type: DataTypes.UUID,
     }
   }, {
     sequelize,

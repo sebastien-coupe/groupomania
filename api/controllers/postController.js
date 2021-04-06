@@ -1,8 +1,10 @@
-const { Post } = require('../models');
+const { Post, User } = require('../models');
 const fs = require('fs/promises');
 
 exports.findAll = async ctx => {
-  const posts = await Post.findAll();
+  const posts = await Post.findAll({
+    include: User
+  });
 
   ctx.body = {
     status: 'success',
@@ -28,15 +30,23 @@ exports.findOne = async ctx => {
 }
 
 exports.create = async ctx => {
-  const { body, userId } = ctx.request.body;
+  const { body, uid } = ctx.request.body;
 
   const imageUrl = ctx.file ? `${ctx.protocol}://${ctx.host}/${ctx.file.path}` : '';
 
-  if (!body || !userId) ctx.throw(400, 'Request is not valid')
+  if (!body || !uid) ctx.throw(400, 'Request is not valid')
+
+  const user = await User.findOne({
+    where: {
+      uuid: uid
+    }
+  });
+
+  console.log(user);
 
   const createdPost = await Post.create({
     body,
-    userId,
+    userId: user.id,
     imageUrl
   });
 
@@ -45,7 +55,7 @@ exports.create = async ctx => {
   ctx.status = 201;
   ctx.body = {
     status: 'success',
-    message: 'New post has been created successfully'
+    message: 'New post has been created successfully',
   }
 }
 

@@ -6,14 +6,16 @@ const postController = require('../controllers/postController');
 
 const imageUpload = require('../middlewares/imageUploadMiddleware');
 
-router.get('/', postController.findAll);
+const tokenValidation = require('../middlewares/tokenValidationMiddleware');
 
-router.get('/:uuid', postController.findOne);
+router.get('/', tokenValidation, postController.findAll);
 
-router.post('/', imageUpload, postController.create);
+router.get('/:uuid', tokenValidation, postController.findOne);
 
-router.put('/:uuid', imageUpload, postController.update);
+router.post('/', tokenValidation, imageUpload, postController.create);
 
-router.del('/:uuid', postController.delete);
+router.put('/:uuid', tokenValidation, imageUpload, postController.update);
+
+router.del('/:uuid', tokenValidation, postController.delete);
 
 module.exports = router;

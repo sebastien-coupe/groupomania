@@ -11,7 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate({ Post }) {
       // define association here
-      this.hasMany(Post, { foreignKey: 'uuid', as: 'posts' });
+      this.hasMany(Post, { foreignKey: 'userId' });
+    }
+
+    toJSON() {
+      return { ...this.get(), id: undefined, password: undefined }
     }
   };
   User.init({

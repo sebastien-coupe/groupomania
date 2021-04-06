@@ -21,7 +21,7 @@ module.exports = {
       },
       userId: {
         allowNull: false,
-        type: DataTypes.UUID
+        type: DataTypes.INTEGER
       },
       createdAt: {
         allowNull: false,
