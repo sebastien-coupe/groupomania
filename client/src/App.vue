@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex flex-column min-vh-100">
     <Navbar />
-    <section class="d-flex flex-column flex-grow-1">
+    <section class="d-flex flex-column flex-grow-1 py-5">
       <router-view />
     </section>
     <Footer />
