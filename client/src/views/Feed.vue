@@ -2,11 +2,7 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col col-sm-10 col-md-8">
-        <div v-if="isLoading" class="loader d-flex justify-content-center py-4">
-          <i class="bi bi-dot"></i>
-          <i class="bi bi-dot"></i>
-          <i class="bi bi-dot"></i>
-        </div>
+        <Loader v-if="isLoading" />
         <div v-for="post in posts" :key="post.uuid" class="card shadow-sm">
           <div class="d-flex align-items-center px-3 pt-3">
             <img
@@ -55,10 +51,16 @@
 </template>
 
 <script>
+import Loader from '@/components/TheLoader';
+
 export default {
   name: 'Feed',
 
   inject: ['API_URL'],
+
+  components: {
+    Loader,
+  },
 
   data() {
     return {
@@ -99,34 +101,5 @@ export default {
 .thumbnail {
   width: 48px;
   border-radius: 50%;
-}
-
-.loader .bi {
-  font-size: 48px;
-  line-height: 1;
-  animation-name: blink;
-  animation-duration: 1s;
-  animation-iteration-count: infinite;
-  animation-fill-mode: both;
-}
-
-.loader .bi:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.loader .bi:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-@keyframes blink {
-  0% {
-    opacity: 0.2;
-  }
-  20% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.2;
-  }
 }
 </style>
