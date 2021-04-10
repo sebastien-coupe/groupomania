@@ -57,7 +57,7 @@ exports.create = async ctx => {
   ctx.status = 201;
   ctx.body = {
     status: 'success',
-    message: 'New post has been created successfully',
+    post: createdPost
   }
 }
 
