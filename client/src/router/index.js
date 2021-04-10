@@ -3,12 +3,21 @@ import store from '../store'
 import Feed from '../views/Feed.vue'
 import Signup from '../views/Signup.vue'
 import Signin from '../views/Signin.vue'
+import Me from '../views/Me.vue'
 
 const routes = [
   {
     path: '/',
     name: 'Feed',
     component: Feed,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/me',
+    name: 'Me',
+    component: Me,
     meta: {
       requiresAuth: true
     }

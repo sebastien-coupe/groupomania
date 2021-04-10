@@ -8,7 +8,7 @@
         class="navbar-nav align-items-center ml-auto mb-lg-0"
       >
         <li class="nav-item profile">
-          <router-link :to="{ path: 'Profile' }" class="nav-link">
+          <router-link :to="{ name: 'Me' }" class="nav-link">
             <div class="d-flex align-items-center">
               <img :src="avatar" class="avatar rounded" alt="avatar" />
               <span class="ms-2">Mon compte</span>
@@ -23,12 +23,12 @@
       </ul>
       <ul v-else class="navbar-nav align-items-center ml-auto mb-lg-0">
         <li v-if="$route.path !== '/signin'" class="nav-item">
-          <router-link :to="{ path: 'Signin' }" class="btn btn-primary btn-sm"
+          <router-link :to="{ name: 'Signin' }" class="btn btn-primary btn-sm"
             >Connexion</router-link
           >
         </li>
         <li v-if="$route.path !== '/signup'" class="nav-item ms-2 ms-sm-4">
-          <router-link :to="{ path: 'Signup' }" class="btn btn-primary btn-sm"
+          <router-link :to="{ name: 'Signup' }" class="btn btn-primary btn-sm"
             >Inscription</router-link
           >
         </li>
