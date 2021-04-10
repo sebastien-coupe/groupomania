@@ -106,7 +106,7 @@ export default {
       const data = new FormData();
 
       data.append('body', this.body);
-      data.append('uid', this.$store.getters.userId);
+      data.append('uid', this.$store.getters.user.uuid);
 
       if (this.image) {
         data.append('image', this.image);

@@ -3,46 +3,47 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     token: localStorage.getItem('token') || '',
-    userId: localStorage.getItem('userId') || '',
+    user: JSON.parse(localStorage.getItem('user')) || {},
   },
   mutations: {
     setToken(state, token) {
       state.token = token
     },
 
-    setUserId(state, userId) {
-      state.userId = userId
+    setUser(state, user) {
+      state.user = user
     },
 
     clearToken(state) {
       state.token = ''
     },
 
-    clearUserId(state) {
-      state.userId = ''
+    clearUser(state) {
+      state.user = {}
     }
   },
   actions: {
-    login(context, { token, uid }) {
+    login(context, { token, user }) {
       context.commit('setToken', token)
-      context.commit('setUserId', uid)
+      context.commit('setUser', user)
 
       localStorage.setItem('token', token)
-      localStorage.setItem('userId', uid)
+      localStorage.setItem('user', JSON.stringify(user))
     },
 
     logout(context) {
       context.commit('clearToken')
-      context.commit('clearUserId')
+      context.commit('clearUser')
 
       localStorage.removeItem('token')
-      localStorage.removeItem('userId')
+      localStorage.removeItem('user')
     }
   },
   modules: {
   },
   getters: {
     isAuthenticated: state => !!state.token,
-    token: state => state.token
+    token: state => state.token,
+    user: state => state.user
   }
 })
