@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card shadow-sm">
     <div class="d-flex align-items-center p-3">
       <img
         class="thumbnail-sm d-block"

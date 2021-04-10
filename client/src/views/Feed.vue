@@ -14,7 +14,9 @@
             Pas encore de publications.
           </div>
         </div>
-        <Post v-else v-for="post in posts" :key="post.uuid" :post="post" />
+        <div v-else class="mt-5">
+          <Post v-for="post in posts" :key="post.uuid" :post="post" />
+        </div>
       </div>
     </div>
   </div>

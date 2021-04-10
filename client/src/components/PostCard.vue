@@ -16,7 +16,7 @@
         >
         <!-- To be formatted -->
         <span class="d-block text-secondary small mt-1"
-          >Publié le {{ post.author.createdAt }}</span
+          >Publié {{ formatDate(post.createdAt) }}</span
         >
       </div>
     </div>
@@ -49,9 +49,20 @@
 </template>
 
 <script>
+import moment from 'moment';
+moment.locale('fr');
+
 export default {
   name: 'Post',
+
   props: ['post'],
+
+  methods: {
+    formatDate(date) {
+      console.log(date);
+      return moment(date).fromNow();
+    },
+  },
 };
 </script>
 
