@@ -9,7 +9,10 @@
       >
         <li class="nav-item profile">
           <router-link :to="{ path: 'Profile' }" class="nav-link">
-            Mon Profil
+            <div class="d-flex align-items-center">
+              <img :src="avatar" class="avatar rounded" alt="avatar" />
+              <span class="ms-2">Mon compte</span>
+            </div>
           </router-link>
         </li>
         <li class="nav-item ms-2">
@@ -37,11 +40,24 @@
 <script>
 export default {
   name: 'Navbar',
+
+  data() {
+    return {
+      avatar: '',
+    };
+  },
+
   methods: {
     async logout() {
       await this.$store.dispatch('logout');
       await this.$router.push({ name: 'Signin' });
     },
+  },
+
+  mounted() {
+    this.avatar =
+      this.$store.getters.user.avatarUrl ||
+      'http://localhost:3000/public/avatar_default.png';
   },
 };
 </script>
@@ -49,5 +65,10 @@ export default {
 <style>
 .profile {
   font-size: 0.875rem;
+}
+
+.avatar {
+  width: 18px;
+  height: 18px;
 }
 </style>
