@@ -19,8 +19,24 @@
           >Publié {{ formatDate(post.createdAt) }}</span
         >
       </div>
+      <div class="ms-auto">
+        <button @click="togglePostActions" class="btn btn-link btn-sm">
+          <i v-if="showPostActions" class="bi bi-x"></i>
+          <i v-else class="bi bi-three-dots"></i>
+        </button>
+      </div>
     </div>
-
+    <div v-if="showPostActions" class="py-3">
+      <div class="d-flex justify-content-center bg-light">
+        <div v-if="post.author.uuid === $store.getters.user.uuid" class="py-3">
+          <button class="btn btn-danger btn-sm">Supprimer</button>
+          <button class="btn btn-primary btn-sm ms-2">Modifier</button>
+        </div>
+        <div v-else class="py-3">
+          <button class="btn btn-primary btn-sm">Signaler</button>
+        </div>
+      </div>
+    </div>
     <div class="card-body">
       <p class="card-text">
         {{ post.body }}
@@ -32,10 +48,10 @@
     <div class="d-flex align-items-center px-3 pb-3 pt-4">
       <!-- TODO: Make it dynamic -->
       <div>
-        <button type="button" class="btn btn-light btn-sm">
+        <button type="button" class="btn btn-outline-success btn-sm">
           <i class="bi bi-arrow-up-short"></i>
         </button>
-        <button type="button" class="btn btn-light btn-sm ms-1">
+        <button type="button" class="btn btn-outline-danger btn-sm ms-1">
           <i class="bi bi-arrow-down-short"></i>
         </button>
       </div>
@@ -57,9 +73,19 @@ export default {
 
   props: ['post'],
 
+  data() {
+    return {
+      showPostActions: false,
+    };
+  },
+
   methods: {
     formatDate(date) {
       return moment(date).fromNow();
+    },
+
+    togglePostActions() {
+      this.showPostActions = !this.showPostActions;
     },
   },
 };
