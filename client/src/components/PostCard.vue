@@ -24,6 +24,9 @@
       <p class="card-text">
         {{ post.body }}
       </p>
+      <div v-if="post.imageUrl">
+        <img :src="post.imageUrl" alt="" class="img-fluid rounded" />
+      </div>
     </div>
     <div class="d-flex align-items-center px-3 pb-3 pt-4">
       <!-- TODO: Make it dynamic -->

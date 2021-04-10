@@ -57,6 +57,8 @@ export default {
 
   inject: ['API_URL'],
 
+  emits: ['addPost'],
+
   data() {
     return {
       body: '',
@@ -122,6 +124,8 @@ export default {
       });
 
       const result = await response.json();
+
+      this.$emit('addPost', result.post);
 
       this.clearForm();
     },

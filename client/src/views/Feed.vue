@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col col-sm-10 col-md-8">
-        <PostForm />
+        <PostForm @addPost="updateFeed" />
         <Loader v-if="isLoading" />
         <Post v-else v-for="post in posts" :key="post.uuid" :post="post" />
       </div>
@@ -33,6 +33,17 @@ export default {
     };
   },
 
+  methods: {
+    updateFeed(data) {
+      const newPost = {
+        ...data,
+        author: this.$store.getters.user,
+      };
+
+      this.posts = [newPost, ...this.posts];
+    },
+  },
+
   async mounted() {
     this.isLoading = true;
 
@@ -51,6 +62,8 @@ export default {
     const data = await response.json();
 
     this.posts = data.posts;
+
+    console.log(this.posts);
 
     this.isLoading = false;
   },
