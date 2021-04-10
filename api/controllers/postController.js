@@ -3,7 +3,8 @@ const fs = require('fs/promises');
 
 exports.findAll = async ctx => {
   const posts = await Post.findAll({
-    include: 'author'
+    include: 'author',
+    order: [['createdAt', 'desc']]
   });
 
   ctx.body = {
