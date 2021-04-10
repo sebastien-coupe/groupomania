@@ -14,9 +14,10 @@
             >{{ post.author.firstName }} {{ post.author.lastName }}</a
           ></span
         >
-        <span class="d-block text-secondary small">{{
-          post.author.role || 'Admin'
-        }}</span>
+        <!-- To be formatted -->
+        <span class="d-block text-secondary small mt-1"
+          >Publié le {{ post.author.createdAt }}</span
+        >
       </div>
     </div>
 
