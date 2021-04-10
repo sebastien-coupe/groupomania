@@ -59,7 +59,6 @@ export default {
 
   methods: {
     formatDate(date) {
-      console.log(date);
       return moment(date).fromNow();
     },
   },

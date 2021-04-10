@@ -100,8 +100,6 @@ export default {
         };
         reader.readAsDataURL(file[0]);
       }
-
-      console.log(this.image);
     },
 
     async submitForm() {
