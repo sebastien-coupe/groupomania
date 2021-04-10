@@ -4,6 +4,16 @@
       <div class="col col-sm-10 col-md-8">
         <PostForm @addPost="updateFeed" />
         <Loader v-if="isLoading" />
+        <div v-else-if="hasFailed">
+          <div class="alert alert-danger" role="alert">
+            Impossible de récupérer les posts.
+          </div>
+        </div>
+        <div v-else-if="!posts.length">
+          <div class="alert alert-primary" role="alert">
+            Pas encore de publications.
+          </div>
+        </div>
         <Post v-else v-for="post in posts" :key="post.uuid" :post="post" />
       </div>
     </div>
@@ -30,6 +40,7 @@ export default {
     return {
       posts: [],
       isLoading: false,
+      hasFailed: false,
     };
   },
 
@@ -57,15 +68,22 @@ export default {
       headers,
     });
 
-    if (!response.ok) return;
+    if (!response.ok) {
+      this.isLoading = false;
+      this.hasFailed = true;
+    }
 
     const data = await response.json();
 
     this.posts = data.posts;
 
-    console.log(this.posts);
-
     this.isLoading = false;
   },
 };
 </script>
+
+<style>
+.alert {
+  margin-top: 40px;
+}
+</style>
