@@ -10,24 +10,35 @@
         <span class="fs-5 text-secondary">Quoi de neuf ?</span>
       </div>
       <div v-if="!showForm" class="ms-auto">
-        <button @click="toggleForm" class="btn btn-primary btn-sm">
+        <button
+          @click="toggleForm"
+          class="btn btn-primary btn-sm"
+          title="Ajouter une publication"
+        >
           <i class="bi bi-pencil"></i>
+          <span class="visually-hidden">Ajouter une publication</span>
         </button>
       </div>
     </div>
     <div v-if="showForm" class="card-body">
       <form @submit.prevent="submitForm">
-        <textarea v-model="body" class="form-control" rows="6"></textarea>
-        <div class="mt-2">
+        <div class="d-flex align-items-center">
           <button
             @click.prevent="toggleImageInput"
-            class="btn btn-outline-secondary btn-sm"
+            class="btn btn-primary btn-sm"
+            :class="imageInput ? 'active' : ''"
             title="Ajouter une image"
           >
             <i class="bi bi-card-image"></i>
+            <span class="visually-hidden">Ajouter une image</span>
           </button>
+          <button @click="clearForm" class="btn btn-danger btn-sm ms-auto">
+            Annuler
+          </button>
+          <button class="btn btn-success btn-sm ms-2">Publier</button>
         </div>
-        <div class="mt-2">
+        <textarea v-model="body" class="form-control mt-3" rows="6"></textarea>
+        <div class="mt-3">
           <input
             v-if="imageInput"
             @change="preloadImage"
@@ -39,12 +50,6 @@
           <div v-if="imagePreview" class="mt-2">
             <img :src="imagePreview" class="w-25 rounded" alt="preview" />
           </div>
-        </div>
-        <div class="text-end mt-3">
-          <button @click="clearForm" class="btn btn-danger btn-sm">
-            Annuler
-          </button>
-          <button class="btn btn-success btn-sm ms-2">Publier</button>
         </div>
       </form>
     </div>
