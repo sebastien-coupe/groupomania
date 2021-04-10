@@ -59,7 +59,7 @@ exports.signin = async ctx => {
   }
 
   ctx.body = {
-    uid: user.uuid,
+    user,
     token: jwt.sign(
       { uid: user.uuid },
       process.env.TOKEN_SALT,
