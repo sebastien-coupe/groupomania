@@ -34,17 +34,28 @@
       </div>
     </div>
     <div class="card-body">
-      <p class="card-text">
-        {{ post.body }}
+      <p
+        v-if="post.hasBeenReported"
+        class="card-text text-center bg-light py-2"
+      >
+        Cette publication a été signalée,<br />contenu en attente de modération.
       </p>
-      <div v-if="post.imageUrl" class="rounded bg-dark overflow-hidden">
-        <img :src="post.imageUrl" alt="" class="d-block img-fluid mx-auto" />
+      <div v-else>
+        <p class="card-text">
+          {{ post.body }}
+        </p>
+        <div v-if="post.imageUrl" class="rounded bg-dark overflow-hidden">
+          <img :src="post.imageUrl" alt="" class="d-block img-fluid mx-auto" />
+        </div>
       </div>
       <span class="d-block text-secondary text-end small mt-3 fst-italic"
         >Publié {{ formatDate(post.createdAt) }}</span
       >
     </div>
-    <div class="d-flex align-items-center px-3 pb-3 pt-4">
+    <div
+      v-if="!post.hasBeenReported"
+      class="d-flex align-items-center px-3 pb-3 pt-4"
+    >
       <!-- TODO: Make it dynamic -->
       <div>
         <button type="button" class="btn btn-outline-success btn-sm">

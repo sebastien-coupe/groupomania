@@ -33,6 +33,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     imageUrl: {
       type: DataTypes.STRING
+    },
+    hasBeenReported: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: 0
     }
   }, {
     sequelize,

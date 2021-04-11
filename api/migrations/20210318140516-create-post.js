@@ -19,6 +19,10 @@ module.exports = {
       imageUrl: {
         type: DataTypes.STRING
       },
+      hasBeenReported: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: 0
+      },
       userId: {
         allowNull: false,
         type: DataTypes.INTEGER
