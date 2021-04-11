@@ -36,11 +36,9 @@
       </div>
     </div>
     <div class="card-body">
-      <p
-        v-if="post.hasBeenReported"
-        class="card-text text-center bg-light py-2"
-      >
-        Cette publication a été signalée,<br />contenu en attente de modération.
+      <p v-if="post.hasBeenReported" class="card-text text-center bg-light p-3">
+        <span class="fw-bold">CONTENU SIGNALÉ</span><br />En attente de
+        modération.
       </p>
       <div v-else>
         <p class="card-text">
