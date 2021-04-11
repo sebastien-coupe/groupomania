@@ -3,7 +3,7 @@
     <div class="d-flex align-items-center p-3">
       <img
         class="thumbnail-sm d-block"
-        src="https://randomuser.me/api/portraits/men/32.jpg"
+        :src="$store.getters.user.avatarUrl"
         alt=""
       />
       <div class="d-block ms-3 lh-sm">

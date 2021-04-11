@@ -48,6 +48,8 @@
 export default {
   name: 'Navbar',
 
+  inject: ['API_URL'],
+
   data() {
     return {
       avatar: '',
@@ -62,9 +64,7 @@ export default {
   },
 
   mounted() {
-    this.avatar =
-      this.$store.getters.user.avatarUrl ||
-      'http://localhost:3000/public/avatar_default.png';
+    this.avatar = this.$store.getters.user.avatarUrl;
   },
 };
 </script>

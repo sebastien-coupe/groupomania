@@ -1,13 +1,7 @@
 <template>
   <div class="card shadow-sm">
     <div class="d-flex align-items-center px-3 pt-3">
-      <img
-        class="thumbnail d-block"
-        :src="
-          post.avatarUrl || 'http://localhost:3000/public/avatar_default.png'
-        "
-        alt=""
-      />
+      <img class="thumbnail d-block" :src="post.author.avatarUrl" alt="" />
       <div class="d-block ms-3 lh-sm">
         <span class="d-block fw-bolder"
           ><a href="#" class="text-decoration-none text-body"
