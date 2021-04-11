@@ -66,6 +66,10 @@ export default {
   mounted() {
     this.avatar = this.$store.getters.user.avatarUrl;
   },
+
+  updated() {
+    this.avatar = this.$store.getters.user.avatarUrl;
+  },
 };
 </script>
 
