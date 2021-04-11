@@ -122,3 +122,23 @@ exports.delete = async ctx => {
     uuid
   }
 }
+
+exports.report = async ctx => {
+  const { uuid } = ctx.params;
+
+  const [result] = await Post.update(
+    { hasBeenReported: true },
+    {
+      where: {
+        uuid
+      }
+    }
+  );
+
+  if (!result) ctx.throw(400, 'No post matching uuid')
+
+  ctx.body = {
+    status: 'success',
+    uuid
+  }
+}

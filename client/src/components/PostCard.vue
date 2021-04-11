@@ -13,14 +13,14 @@
           post.author.role || 'Employé'
         }}</span>
       </div>
-      <div class="ms-auto">
+      <div v-if="!post.hasBeenReported" class="ms-auto">
         <button @click="togglePostActions" class="btn btn-link btn-sm">
           <i v-if="showPostActions" class="bi bi-x"></i>
           <i v-else class="bi bi-three-dots"></i>
         </button>
       </div>
     </div>
-    <div v-if="showPostActions" class="py-3">
+    <div v-if="showPostActions && !post.hasBeenReported" class="py-3">
       <div class="d-flex justify-content-center bg-light">
         <div v-if="post.author.uuid === $store.getters.user.uuid" class="py-3">
           <button @click="deleteItem(post)" class="btn btn-danger btn-sm">
@@ -29,7 +29,9 @@
           <button class="btn btn-primary btn-sm ms-2">Modifier</button>
         </div>
         <div v-else class="py-3">
-          <button class="btn btn-primary btn-sm">Signaler</button>
+          <button @click="reportItem(post)" class="btn btn-primary btn-sm">
+            Signaler
+          </button>
         </div>
       </div>
     </div>
@@ -81,7 +83,7 @@ moment.locale('fr');
 export default {
   name: 'Post',
 
-  emits: ['deletePost'],
+  emits: ['deletePost', 'reportPost'],
 
   inject: ['API_URL'],
 
@@ -102,13 +104,19 @@ export default {
       this.showPostActions = !this.showPostActions;
     },
 
-    async deleteItem(post) {
-      if (post.author.uuid !== this.$store.getters.user.uuid) return;
-
+    setHeaders() {
       const headers = new Headers();
 
       headers.append('Content-Type', 'application/json');
       headers.append('Authorization', `Bearer ${this.$store.getters.token}`);
+
+      return headers;
+    },
+
+    async deleteItem(post) {
+      if (post.author.uuid !== this.$store.getters.user.uuid) return;
+
+      const headers = this.setHeaders();
 
       const response = await fetch(`${this.API_URL}/posts/${post.uuid}`, {
         method: 'DELETE',
@@ -123,6 +131,31 @@ export default {
       const result = await response.json();
 
       this.$emit('deletePost', result.uuid);
+    },
+
+    async reportItem(post) {
+      if (post.author.uuid === this.$store.getters.user.uuid) return;
+
+      const headers = this.setHeaders();
+
+      const response = await fetch(
+        `${this.API_URL}/posts/${post.uuid}/report`,
+        {
+          method: 'GET',
+          headers,
+        }
+      );
+
+      if (!response.ok) {
+        console.log('Impossible de signaler la publication.');
+        return;
+      }
+
+      const result = await response.json();
+
+      this.showPostActions = false;
+
+      this.$emit('reportPost', result.uuid);
     },
   },
 };

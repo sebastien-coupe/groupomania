@@ -18,4 +18,6 @@ router.put('/:uuid', tokenValidation, imageUpload, postController.update);
 
 router.del('/:uuid', tokenValidation, postController.delete);
 
+router.get('/:uuid/report', tokenValidation, postController.report);
+
 module.exports = router;

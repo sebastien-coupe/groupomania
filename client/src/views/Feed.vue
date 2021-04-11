@@ -20,6 +20,7 @@
             :key="post.uuid"
             :post="post"
             @deletePost="deleteFromFeed"
+            @reportPost="markReportedPost"
           />
         </div>
       </div>
@@ -63,6 +64,14 @@ export default {
 
     deleteFromFeed(uuid) {
       this.posts = this.posts.filter((post) => post.uuid !== uuid);
+    },
+
+    markReportedPost(uuid) {
+      this.posts.forEach((post) => {
+        if (post.uuid === uuid) {
+          post.hasBeenReported = true;
+        }
+      });
     },
   },
 
