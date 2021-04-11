@@ -67,7 +67,7 @@ export default {
   data() {
     return {
       body: '',
-      image: null,
+      image: '',
       imagePreview: '',
       showForm: false,
       imageInput: false,
@@ -86,6 +86,7 @@ export default {
     clearForm() {
       this.body = '';
       this.video = '';
+      this.image = '';
       this.imagePreview = '';
       this.videoPreview = '';
       this.imageInput = false;

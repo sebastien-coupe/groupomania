@@ -9,9 +9,9 @@
           ></span
         >
         <!-- To be formatted -->
-        <span class="d-block text-secondary small mt-1"
-          >Publié {{ formatDate(post.createdAt) }}</span
-        >
+        <span class="d-block text-secondary small mt-1">{{
+          post.author.role || 'Employé'
+        }}</span>
       </div>
       <div class="ms-auto">
         <button @click="togglePostActions" class="btn btn-link btn-sm">
@@ -40,6 +40,9 @@
       <div v-if="post.imageUrl" class="rounded bg-dark overflow-hidden">
         <img :src="post.imageUrl" alt="" class="d-block img-fluid mx-auto" />
       </div>
+      <span class="d-block text-secondary text-end small mt-3 fst-italic"
+        >Publié {{ formatDate(post.createdAt) }}</span
+      >
     </div>
     <div class="d-flex align-items-center px-3 pb-3 pt-4">
       <!-- TODO: Make it dynamic -->
