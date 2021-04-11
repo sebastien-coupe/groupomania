@@ -15,7 +15,12 @@
           </div>
         </div>
         <div v-else class="mt-5">
-          <Post v-for="post in posts" :key="post.uuid" :post="post" />
+          <Post
+            v-for="post in posts"
+            :key="post.uuid"
+            :post="post"
+            @deletePost="deleteFromFeed"
+          />
         </div>
       </div>
     </div>
@@ -54,6 +59,10 @@ export default {
       };
 
       this.posts = [newPost, ...this.posts];
+    },
+
+    deleteFromFeed(uuid) {
+      this.posts = this.posts.filter((post) => post.uuid !== uuid);
     },
   },
 

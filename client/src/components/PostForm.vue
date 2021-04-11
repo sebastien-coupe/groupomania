@@ -42,7 +42,7 @@
           <input
             v-if="imageInput"
             @change="preloadImage"
-            ref="image"
+            ref="imageFile"
             class="form-control form-control-sm"
             type="file"
             id="image"
@@ -93,7 +93,7 @@ export default {
     },
 
     preloadImage() {
-      let input = this.$refs.image;
+      let input = this.$refs.imageFile;
       let file = input.files;
 
       if (file && file[0]) {

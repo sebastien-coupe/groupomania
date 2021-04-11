@@ -29,7 +29,9 @@
     <div v-if="showPostActions" class="py-3">
       <div class="d-flex justify-content-center bg-light">
         <div v-if="post.author.uuid === $store.getters.user.uuid" class="py-3">
-          <button class="btn btn-danger btn-sm">Supprimer</button>
+          <button @click="deleteItem(post)" class="btn btn-danger btn-sm">
+            Supprimer
+          </button>
           <button class="btn btn-primary btn-sm ms-2">Modifier</button>
         </div>
         <div v-else class="py-3">
@@ -41,8 +43,8 @@
       <p class="card-text">
         {{ post.body }}
       </p>
-      <div v-if="post.imageUrl">
-        <img :src="post.imageUrl" alt="" class="img-fluid rounded" />
+      <div v-if="post.imageUrl" class="rounded bg-dark overflow-hidden">
+        <img :src="post.imageUrl" alt="" class="d-block img-fluid mx-auto" />
       </div>
     </div>
     <div class="d-flex align-items-center px-3 pb-3 pt-4">
@@ -71,6 +73,10 @@ moment.locale('fr');
 export default {
   name: 'Post',
 
+  emits: ['deletePost'],
+
+  inject: ['API_URL'],
+
   props: ['post'],
 
   data() {
@@ -86,6 +92,29 @@ export default {
 
     togglePostActions() {
       this.showPostActions = !this.showPostActions;
+    },
+
+    async deleteItem(post) {
+      if (post.author.uuid !== this.$store.getters.user.uuid) return;
+
+      const headers = new Headers();
+
+      headers.append('Content-Type', 'application/json');
+      headers.append('Authorization', `Bearer ${this.$store.getters.token}`);
+
+      const response = await fetch(`${this.API_URL}/posts/${post.uuid}`, {
+        method: 'DELETE',
+        headers,
+      });
+
+      if (!response.ok) {
+        console.log('Impossible de supprimer la publication.');
+        return;
+      }
+
+      const result = await response.json();
+
+      this.$emit('deletePost', result.uuid);
     },
   },
 };

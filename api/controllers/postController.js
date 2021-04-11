@@ -119,6 +119,6 @@ exports.delete = async ctx => {
 
   ctx.body = {
     status: 'success',
-    message: `Delete post identified by ${uuid} uuid`
+    uuid
   }
 }
