@@ -14,7 +14,11 @@
         }}</span>
       </div>
       <div v-if="!post.hasBeenReported" class="ms-auto">
-        <button @click="togglePostActions" class="btn btn-link btn-sm">
+        <button
+          @click="togglePostActions"
+          :disabled="showUpdateForm"
+          class="btn btn-link btn-sm"
+        >
           <i v-if="showPostActions" class="bi bi-x"></i>
           <i v-else class="bi bi-three-dots"></i>
         </button>

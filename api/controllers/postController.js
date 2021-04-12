@@ -73,7 +73,7 @@ exports.update = async ctx => {
     }
   });
 
-  if (update.body) {
+  if (update.body && update.body !== "") {
     post.body = update.body
   }
 

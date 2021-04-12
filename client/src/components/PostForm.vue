@@ -35,7 +35,13 @@
           <button @click="clearForm" class="btn btn-danger btn-sm ms-auto">
             Annuler
           </button>
-          <button class="btn btn-success btn-sm ms-2">Publier</button>
+          <button
+            type="submit"
+            :disabled="!body.length"
+            class="btn btn-success btn-sm ms-2"
+          >
+            Publier
+          </button>
         </div>
         <textarea
           v-model="body"

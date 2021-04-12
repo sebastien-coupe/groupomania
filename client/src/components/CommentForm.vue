@@ -4,7 +4,13 @@
       <form @submit.prevent="submitComment">
         <div class="d-flex align-items-center">
           <span>Ajouter un commentaire:</span>
-          <button class="btn btn-success btn-sm ms-auto">Commenter</button>
+          <button
+            type="submit"
+            :disabled="!body.length"
+            class="btn btn-success btn-sm ms-auto"
+          >
+            Commenter
+          </button>
         </div>
         <textarea
           @focus="error = false"
