@@ -67,14 +67,22 @@
       </div>
       <div class="ms-3 small text-secondary text-success">+32 votes</div>
       <div class="ms-auto">
-        <a href="#" class="text-decoration-none small">3 commentaires</a>
+        <button
+          @click="toggleComments"
+          class="btn btn-link btn-sm text-decoration-none"
+        >
+          {{ showComments ? 'Masquer' : 'Afficher' }} les commentaires
+        </button>
       </div>
       <!-- END TODO -->
     </div>
+    <CommentList v-if="showComments" />
   </div>
 </template>
 
 <script>
+import CommentList from '@/components/CommentList';
+
 import moment from 'moment';
 moment.locale('fr');
 
@@ -87,9 +95,14 @@ export default {
 
   props: ['post'],
 
+  components: {
+    CommentList,
+  },
+
   data() {
     return {
       showPostActions: false,
+      showComments: false,
     };
   },
 
@@ -100,6 +113,10 @@ export default {
 
     togglePostActions() {
       this.showPostActions = !this.showPostActions;
+    },
+
+    toggleComments() {
+      this.showComments = !this.showComments;
     },
 
     setHeaders() {
