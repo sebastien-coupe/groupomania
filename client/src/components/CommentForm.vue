@@ -48,6 +48,10 @@ export default {
       return headers;
     },
 
+    clearForm() {
+      this.body = '';
+    },
+
     async submitComment() {
       if (!this.validateForm()) return;
 
@@ -71,6 +75,8 @@ export default {
         console.log("Impossible d'ajouter un commentaire");
         return;
       }
+
+      this.clearForm();
 
       const result = await response.json();
 
