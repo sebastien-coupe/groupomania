@@ -12,7 +12,11 @@ router.get('/', tokenValidation, postController.findAll);
 
 router.get('/:uuid', tokenValidation, postController.findOne);
 
+router.get('/:uuid/comments', tokenValidation, postController.getComments);
+
 router.post('/', tokenValidation, imageUpload, postController.create);
+
+router.post('/:uuid/comments', tokenValidation, postController.addComment);
 
 router.put('/:uuid', tokenValidation, imageUpload, postController.update);
 

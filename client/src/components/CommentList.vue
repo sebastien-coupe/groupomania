@@ -1,8 +1,20 @@
 <template>
   <div class="p-3">
-    <CommentForm />
+    <CommentForm :postId="postId" />
     <div class="mt-4">
-      <Comment />
+      <div v-if="!comments.length">
+        <div class="alert alert-secondary mt-2 mb-0" role="alert">
+          Pas encore de commentaires.
+        </div>
+      </div>
+      <div v-else>
+        <Comment
+          v-for="comment in comments"
+          :key="comment.uuid"
+          :postId="postId"
+          :comment="comment"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -13,6 +25,8 @@ import Comment from '@/components/CommentCard';
 
 export default {
   name: 'CommentList',
+
+  props: ['comments', 'postId'],
 
   components: {
     CommentForm,

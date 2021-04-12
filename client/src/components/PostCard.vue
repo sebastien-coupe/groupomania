@@ -68,7 +68,7 @@
       <div class="ms-3 small text-secondary text-success">+32 votes</div>
       <div class="ms-auto">
         <button
-          @click="toggleComments"
+          @click="toggleComments(post.uuid)"
           class="btn btn-link btn-sm text-decoration-none"
         >
           {{ showComments ? 'Masquer' : 'Afficher' }} les commentaires
@@ -76,7 +76,7 @@
       </div>
       <!-- END TODO -->
     </div>
-    <CommentList v-if="showComments" />
+    <CommentList :comments="comments" :postId="post.uuid" v-if="showComments" />
   </div>
 </template>
 
@@ -103,6 +103,7 @@ export default {
     return {
       showPostActions: false,
       showComments: false,
+      comments: [],
     };
   },
 
@@ -115,7 +116,8 @@ export default {
       this.showPostActions = !this.showPostActions;
     },
 
-    toggleComments() {
+    toggleComments(uuid) {
+      this.fetchComments(uuid);
       this.showComments = !this.showComments;
     },
 
@@ -171,6 +173,24 @@ export default {
       this.showPostActions = false;
 
       this.$emit('reportPost', result.uuid);
+    },
+
+    async fetchComments(uuid) {
+      const headers = this.setHeaders();
+
+      const response = await fetch(`${this.API_URL}/posts/${uuid}/comments`, {
+        method: 'GET',
+        headers,
+      });
+
+      if (!response.ok) {
+        console.log('Impossible de récupérer les commentaires');
+        return;
+      }
+
+      const result = await response.json();
+
+      this.comments = result.comments;
     },
   },
 };

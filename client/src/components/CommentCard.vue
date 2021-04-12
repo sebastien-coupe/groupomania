@@ -10,14 +10,15 @@
       </div>
       <div class="flex-grow-1 ms-sm-3">
         <div class="py-2 px-3 rounded-3 bg-light shadow-sm">
-          <span class="fw-bold">Jonas Kahnwald</span>
+          <span class="fw-bold"
+            >{{ comment.author.firstName }} {{ comment.author.lastName }}</span
+          >
           <p class="w-100 mb-0">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minus,
-            odit.
+            {{ comment.body }}
           </p>
         </div>
         <span class="text-secondary ms-3 small fst-italic"
-          >Publié il y a 1 jour</span
+          >Publié {{ formatDate(comment.createdAt) }}</span
         >
       </div>
     </div>
@@ -25,8 +26,19 @@
 </template>
 
 <script>
+import moment from 'moment';
+moment.locale('fr');
+
 export default {
   name: 'Comment',
+
+  props: ['comment'],
+
+  methods: {
+    formatDate(date) {
+      return moment(date).fromNow();
+    },
+  },
 };
 </script>
 

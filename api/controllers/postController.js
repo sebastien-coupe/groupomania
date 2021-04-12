@@ -1,4 +1,4 @@
-const { Post, User } = require('../models');
+const { Post, User, Comment } = require('../models');
 const fs = require('fs/promises');
 
 exports.findAll = async ctx => {
@@ -43,8 +43,6 @@ exports.create = async ctx => {
       uuid: uid
     }
   });
-
-  console.log(user);
 
   const createdPost = await Post.create({
     body,
@@ -140,5 +138,61 @@ exports.report = async ctx => {
   ctx.body = {
     status: 'success',
     uuid
+  }
+}
+
+exports.getComments = async ctx => {
+  const { uuid } = ctx.params;
+
+  const post = await Post.findOne({
+    where: {
+      uuid
+    }
+  })
+
+  const comments = await Comment.findAll({
+    include: 'author',
+    where: {
+      postId: post.id
+    },
+    order: [['createdAt', 'desc']]
+  });
+
+  ctx.body = {
+    status: 'success',
+    comments
+  }
+}
+
+exports.addComment = async ctx => {
+  const { body, uid } = ctx.request.body;
+  const { uuid } = ctx.params;
+
+  if (!body || !uid || !uuid) ctx.throw(400, 'Request is not valid');
+
+  const user = await User.findOne({
+    where: {
+      uuid: uid
+    }
+  });
+
+  const post = await Post.findOne({
+    where: {
+      uuid
+    }
+  });
+
+  const createdComment = await Comment.create({
+    body,
+    userId: user.id,
+    postId: post.id
+  });
+
+  if (!createdComment) ctx.throw(500, 'Database error saving new post')
+
+  ctx.status = 201;
+  ctx.body = {
+    status: 'success',
+    post: createdComment
   }
 }
