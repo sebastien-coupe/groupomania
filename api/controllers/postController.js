@@ -107,10 +107,16 @@ exports.delete = async ctx => {
     await fs.unlink(`public/uploads/${associatedImageFile}`);
   }
 
+  const _deletedComments = await Comment.destroy({
+    where: {
+      postId: postToDelete.id
+    }
+  });
+
   const deletedPost = await Post.destroy({
     where: {
       uuid
-    }
+    },
   });
 
   if (!deletedPost) ctx.throw(400, 'No post matching uuid');
