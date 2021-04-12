@@ -26,7 +26,8 @@ exports.signup = async ctx => {
       firstName: firstname,
       email,
       password: hashedPassword,
-      avatarUrl: defaultAvatarUrl
+      avatarUrl: defaultAvatarUrl,
+      role: 'Collaborateur Groupomania'
     }
   });
 
