@@ -37,7 +37,15 @@
           </button>
           <button class="btn btn-success btn-sm ms-2">Publier</button>
         </div>
-        <textarea v-model="body" class="form-control mt-3" rows="6"></textarea>
+        <textarea
+          v-model="body"
+          @click="error = false"
+          class="form-control mt-3"
+          rows="6"
+        ></textarea>
+        <span v-if="error" class="small text-danger"
+          >Du contenu est requis</span
+        >
         <div class="mt-3">
           <input
             v-if="imageInput"
@@ -71,6 +79,7 @@ export default {
       imagePreview: '',
       showForm: false,
       imageInput: false,
+      error: false,
     };
   },
 
@@ -109,6 +118,8 @@ export default {
     },
 
     async submitForm() {
+      if (!this.validateForm()) return;
+
       const data = new FormData();
 
       data.append('body', this.body);
@@ -132,6 +143,14 @@ export default {
       this.$emit('addPost', result.post);
 
       this.clearForm();
+    },
+
+    validateForm() {
+      if (!this.body) {
+        this.error = true;
+        return false;
+      }
+      return true;
     },
   },
 };

@@ -81,6 +81,21 @@ exports.update = async ctx => {
     post.imageUrl = imageUrl
   }
 
+  console.log(update.delImg)
+
+  if (!imageUrl && update.delImg) {
+    const associatedImageFile = post.imageUrl ? post.imageUrl.split('/uploads/')[1] : null;
+
+    if (associatedImageFile) {
+      await fs.unlink(`public/uploads/${associatedImageFile}`);
+    }
+
+    post.imageUrl = '';
+  }
+
+  console.log(post)
+
+
   const updatedPost = await post.save();
 
   ctx.body = {

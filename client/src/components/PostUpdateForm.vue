@@ -27,11 +27,30 @@
         type="file"
         id="image"
       />
-      <div v-if="!imagePreview && post.imageUrl" class="mt-2">
-        <img :src="post.imageUrl" class="w-25 rounded" alt="preview" />
+      <div v-if="!imagePreview && post.imageUrl && !deleteImage" class="mt-2">
+        <div class="position-relative w-25">
+          <img
+            :src="post.imageUrl"
+            class="d-block w-100 rounded"
+            alt="preview"
+          />
+          <div class="image-action">
+            <button
+              @click="removeImage"
+              class="btn btn-danger btn-sm m-auto"
+              title="Supprimer l'image"
+            >
+              <i class="bi bi-x-circle"></i>
+            </button>
+          </div>
+        </div>
       </div>
       <div v-if="imagePreview" class="mt-2">
-        <img :src="imagePreview" class="w-25 rounded" alt="preview" />
+        <img
+          :src="imagePreview"
+          class="w-25 rounded update-preview"
+          alt="preview"
+        />
       </div>
     </div>
   </form>
@@ -52,6 +71,7 @@ export default {
       imageInput: false,
       imagePreview: '',
       body: this.post.body,
+      deleteImage: false,
     };
   },
 
@@ -80,11 +100,16 @@ export default {
       }
     },
 
+    removeImage() {
+      this.deleteImage = true;
+    },
+
     async submitForm() {
       const data = new FormData();
 
       data.append('body', this.body);
       data.append('uid', this.$store.getters.user.uuid);
+      data.append('delImg', this.deleteImage);
 
       if (this.image) {
         data.append('image', this.image);
@@ -113,4 +138,19 @@ export default {
 </script>
 
 <style>
+.image-action {
+  display: flex;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.6);
+  opacity: 0;
+  transition: opacity 0.15s ease-in-out;
+}
+
+.image-action:hover {
+  opacity: 1;
+}
 </style>
