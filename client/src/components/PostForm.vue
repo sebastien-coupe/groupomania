@@ -65,6 +65,8 @@
 </template>
 
 <script>
+import setHeaders from '@/helpers/setHeaders';
+
 export default {
   name: 'PostForm',
 
@@ -128,9 +130,7 @@ export default {
       if (this.image) {
         data.append('image', this.image);
       }
-      const headers = new Headers();
-
-      headers.append('Authorization', `Bearer ${this.$store.getters.token}`);
+      const headers = setHeaders();
 
       const response = await fetch(`${this.API_URL}/posts`, {
         method: 'POST',

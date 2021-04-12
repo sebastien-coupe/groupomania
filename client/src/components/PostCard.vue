@@ -98,6 +98,8 @@
 import UpdateForm from '@/components/PostUpdateForm';
 import CommentList from '@/components/CommentList';
 
+import setHeaders from '@/helpers/setHeaders';
+
 import moment from 'moment';
 moment.locale('fr');
 
@@ -152,15 +154,6 @@ export default {
       this.$emit('reloadPost', updatedPost);
     },
 
-    setHeaders() {
-      const headers = new Headers();
-
-      headers.append('Content-Type', 'application/json');
-      headers.append('Authorization', `Bearer ${this.$store.getters.token}`);
-
-      return headers;
-    },
-
     updateCommentList(comment) {
       const newComment = {
         ...comment,
@@ -172,7 +165,7 @@ export default {
     async deleteItem(post) {
       if (post.author.uuid !== this.$store.getters.user.uuid) return;
 
-      const headers = this.setHeaders();
+      const headers = setHeaders({ json: true });
 
       const response = await fetch(`${this.API_URL}/posts/${post.uuid}`, {
         method: 'DELETE',
@@ -192,7 +185,7 @@ export default {
     async reportItem(post) {
       if (post.author.uuid === this.$store.getters.user.uuid) return;
 
-      const headers = this.setHeaders();
+      const headers = setHeaders({ json: true });
 
       const response = await fetch(
         `${this.API_URL}/posts/${post.uuid}/report`,
@@ -215,7 +208,7 @@ export default {
     },
 
     async fetchComments(uuid) {
-      const headers = this.setHeaders();
+      const headers = setHeaders({ json: true });
 
       const response = await fetch(`${this.API_URL}/posts/${uuid}/comments`, {
         method: 'GET',

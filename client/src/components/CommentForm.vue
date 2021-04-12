@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import setHeaders from '@/helpers/setHeaders';
+
 export default {
   name: 'CommentForm',
 
@@ -39,15 +41,6 @@ export default {
   },
 
   methods: {
-    setHeaders() {
-      const headers = new Headers();
-
-      headers.append('Content-Type', 'application/json');
-      headers.append('Authorization', `Bearer ${this.$store.getters.token}`);
-
-      return headers;
-    },
-
     clearForm() {
       this.body = '';
     },
@@ -55,7 +48,7 @@ export default {
     async submitComment() {
       if (!this.validateForm()) return;
 
-      const headers = this.setHeaders();
+      const headers = setHeaders({ json: true });
 
       const comment = {
         body: this.body,

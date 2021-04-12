@@ -34,6 +34,8 @@ import Loader from '@/components/TheLoader';
 import PostForm from '@/components/PostForm';
 import Post from '@/components/PostCard';
 
+import setHeaders from '@/helpers/setHeaders';
+
 export default {
   name: 'Feed',
 
@@ -87,10 +89,7 @@ export default {
   async mounted() {
     this.isLoading = true;
 
-    const headers = new Headers();
-
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', `Bearer ${this.$store.getters.token}`);
+    const headers = setHeaders({ json: true });
 
     const response = await fetch(`${this.API_URL}/posts`, {
       method: 'GET',
