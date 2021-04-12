@@ -193,6 +193,6 @@ exports.addComment = async ctx => {
   ctx.status = 201;
   ctx.body = {
     status: 'success',
-    post: createdComment
+    comment: createdComment
   }
 }

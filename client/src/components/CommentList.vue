@@ -1,6 +1,6 @@
 <template>
   <div class="p-3">
-    <CommentForm :postId="postId" />
+    <CommentForm :postId="postId" @addComment="addComment" />
     <div class="mt-4">
       <div v-if="!comments.length">
         <div class="alert alert-secondary mt-2 mb-0" role="alert">
@@ -31,6 +31,12 @@ export default {
   components: {
     CommentForm,
     Comment,
+  },
+
+  methods: {
+    addComment(data) {
+      this.$emit('addComment', data);
+    },
   },
 };
 </script>

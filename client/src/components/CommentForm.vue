@@ -25,6 +25,8 @@
 export default {
   name: 'CommentForm',
 
+  emits: ['addComment'],
+
   inject: ['API_URL'],
 
   props: ['postId'],
@@ -65,13 +67,14 @@ export default {
         }
       );
 
-      if (response.ok) {
-        console.log('Done!');
+      if (!response.ok) {
+        console.log("Impossible d'ajouter un commentaire");
+        return;
       }
 
       const result = await response.json();
 
-      console.log(result);
+      this.$emit('addComment', result.comment);
     },
 
     validateForm() {

@@ -76,7 +76,12 @@
       </div>
       <!-- END TODO -->
     </div>
-    <CommentList :comments="comments" :postId="post.uuid" v-if="showComments" />
+    <CommentList
+      :comments="comments"
+      :postId="post.uuid"
+      @addComment="updateCommentList"
+      v-if="showComments"
+    />
   </div>
 </template>
 
@@ -128,6 +133,14 @@ export default {
       headers.append('Authorization', `Bearer ${this.$store.getters.token}`);
 
       return headers;
+    },
+
+    updateCommentList(comment) {
+      const newComment = {
+        ...comment,
+        author: this.$store.getters.user,
+      };
+      this.comments = [newComment, ...this.comments];
     },
 
     async deleteItem(post) {
