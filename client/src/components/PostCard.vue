@@ -26,7 +26,9 @@
           <button @click="deleteItem(post)" class="btn btn-danger btn-sm">
             Supprimer
           </button>
-          <button class="btn btn-primary btn-sm ms-2">Modifier</button>
+          <button @click="openUpdateForm" class="btn btn-primary btn-sm ms-2">
+            Modifier
+          </button>
         </div>
         <div v-else class="py-3">
           <button @click="reportItem(post)" class="btn btn-primary btn-sm">
@@ -40,6 +42,13 @@
         <span class="fw-bold">CONTENU SIGNALÉ</span><br />En attente de
         modération.
       </p>
+      <div v-else-if="showUpdateForm">
+        <UpdateForm
+          @closeForm="closeUpdateForm"
+          @updatePost="reloadPost"
+          :post="post"
+        />
+      </div>
       <div v-else>
         <p class="card-text">
           {{ post.body }}
@@ -86,6 +95,7 @@
 </template>
 
 <script>
+import UpdateForm from '@/components/PostUpdateForm';
 import CommentList from '@/components/CommentList';
 
 import moment from 'moment';
@@ -94,13 +104,14 @@ moment.locale('fr');
 export default {
   name: 'Post',
 
-  emits: ['deletePost', 'reportPost'],
+  emits: ['deletePost', 'reportPost', 'reloadPost'],
 
   inject: ['API_URL'],
 
   props: ['post'],
 
   components: {
+    UpdateForm,
     CommentList,
   },
 
@@ -108,6 +119,7 @@ export default {
     return {
       showPostActions: false,
       showComments: false,
+      showUpdateForm: false,
       comments: [],
     };
   },
@@ -124,6 +136,20 @@ export default {
     toggleComments(uuid) {
       this.fetchComments(uuid);
       this.showComments = !this.showComments;
+    },
+
+    openUpdateForm() {
+      this.showPostActions = false;
+      this.showUpdateForm = true;
+    },
+
+    closeUpdateForm() {
+      this.showPostActions = false;
+      this.showUpdateForm = false;
+    },
+
+    reloadPost(updatedPost) {
+      this.$emit('reloadPost', updatedPost);
     },
 
     setHeaders() {

@@ -21,6 +21,7 @@
             :post="post"
             @deletePost="deleteFromFeed"
             @reportPost="markReportedPost"
+            @reloadPost="reloadPost"
           />
         </div>
       </div>
@@ -72,6 +73,14 @@ export default {
           post.hasBeenReported = true;
         }
       });
+    },
+
+    reloadPost(newPost) {
+      const postIndex = this.posts.findIndex(
+        (post) => post.uuid == newPost.uuid
+      );
+      const author = this.posts[postIndex].author;
+      this.posts[postIndex] = { ...newPost, author };
     },
   },
 

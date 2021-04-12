@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'userId',
         as: 'author'
       });
-      this.hasMany(Comment, { foreignKey: 'userId', as: 'comments' });
+      this.hasMany(Comment, { foreignKey: 'postId', as: 'comments' });
     }
 
     toJSON() {

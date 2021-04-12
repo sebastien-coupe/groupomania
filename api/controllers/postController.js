@@ -60,35 +60,32 @@ exports.create = async ctx => {
 }
 
 exports.update = async ctx => {
+  const update = ctx.request.body
   const imageUrl = ctx.file ? `${ctx.protocol}://${ctx.host}/${ctx.file.path}` : '';
 
   if (!ctx.file && !ctx.request.body) ctx.throw(400, 'Cannot update without content')
 
-  const body = imageUrl ? {
-    ...ctx.request.body,
-    imageUrl
-  } : {
-    ...ctx.request.body
-  };
-
   const { uuid } = ctx.params;
 
-  if (!Object.keys(body).length) ctx.throw(400, 'Request is not valid');
-
-  const [updatedPost] = await Post.update(
-    body,
-    {
-      where: {
-        uuid
-      }
+  const post = await Post.findOne({
+    where: {
+      uuid
     }
-  );
+  });
 
-  if (!updatedPost) ctx.throw(400, 'No post matching uuid')
+  if (update.body) {
+    post.body = update.body
+  }
+
+  if (imageUrl) {
+    post.imageUrl = imageUrl
+  }
+
+  const updatedPost = await post.save();
 
   ctx.body = {
     status: 'success',
-    message: `Update post identified by ${ctx.params.uuid} uuid`
+    post: updatedPost
   }
 }
 
