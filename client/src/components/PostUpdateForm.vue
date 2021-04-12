@@ -17,7 +17,13 @@
         Enregister
       </button>
     </div>
-    <textarea v-model="body" class="form-control mt-3" rows="6"></textarea>
+    <textarea
+      v-model="body"
+      @focus="error = false"
+      class="form-control mt-3"
+      rows="6"
+    ></textarea>
+    <span v-if="error" class="small text-danger">Du contenu est requis</span>
     <div class="mt-3">
       <input
         v-if="imageInput"
@@ -74,6 +80,7 @@ export default {
       imagePreview: '',
       body: this.post.body,
       deleteImage: false,
+      error: false,
     };
   },
 
@@ -107,6 +114,8 @@ export default {
     },
 
     async submitForm() {
+      if (!this.validateForm()) return;
+
       const data = new FormData();
 
       data.append('body', this.body);
@@ -132,6 +141,14 @@ export default {
 
       this.$emit('updatePost', result.post);
       this.toggleUpdateForm();
+    },
+
+    validateForm() {
+      if (!this.body) {
+        this.error = true;
+        return false;
+      }
+      return true;
     },
   },
 };

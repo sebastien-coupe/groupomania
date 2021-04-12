@@ -39,7 +39,7 @@
         </div>
         <textarea
           v-model="body"
-          @click="error = false"
+          @focus="error = false"
           class="form-control mt-3"
           rows="6"
         ></textarea>
