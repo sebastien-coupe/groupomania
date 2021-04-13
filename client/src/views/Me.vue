@@ -43,33 +43,38 @@
         role="tabpanel"
         aria-labelledby="home-tab"
       >
-        <form>
+        <form @submit.prevent="updateProfile">
           <div class="row align-items-start">
             <div class="col-4">
-              <div class="d-flex justify-content-center flex-wrap mt-5">
-                <div class="position-relative">
-                  <img :src="user.avatarUrl" id="user-avatar" alt="avatar" />
-                  <div
-                    class="w-100 position-absolute bottom-0 text-center avatar-action"
-                  >
-                    <button
-                      @click.prevent="changeAvatar = !changeAvatar"
-                      class="btn btn-link btn-sm text-decoration-none text-white"
-                    >
-                      {{ changeAvatar ? 'Annuler' : 'Changer' }}
-                    </button>
-                  </div>
-                </div>
-                <div v-if="changeAvatar" class="mt-3">
-                  <input class="form-control form-control-sm" type="file" />
+              <div class="d-flex justify-content-center mt-3">
+                <div class="avatar-container">
+                  <img
+                    :src="avatarPreview || user.avatarUrl"
+                    alt="avatar"
+                    id="avatar"
+                  />
                 </div>
               </div>
             </div>
             <div class="col-8">
               <div class="mb-3">
+                <label for="lastName" class="form-label"
+                  >Utiliser un avatar personalisé</label
+                >
+                <input
+                  @change="preloadImage"
+                  ref="newAvatar"
+                  class="form-control"
+                  type="file"
+                  id="image"
+                />
+                <div class="form-text">
+                  Formats: jpg, jpeg, png Max: 180x180px
+                </div>
+              </div>
+              <div class="mb-3">
                 <label for="lastName" class="form-label">Nom</label>
                 <input
-                  @keyup="compare"
                   v-model="user.lastName"
                   type="text"
                   class="form-control"
@@ -79,7 +84,6 @@
               <div class="mb-3">
                 <label for="firstName" class="form-label">Prénom</label>
                 <input
-                  @keyup="compare"
                   v-model="user.firstName"
                   type="text"
                   class="form-control"
@@ -176,6 +180,8 @@ export default {
   data() {
     return {
       user: {},
+      image: '',
+      avatarPreview: '',
       updated: false,
       showConfirm: false,
       changeAvatar: false,
@@ -192,6 +198,22 @@ export default {
       }
       this.updated = false;
       console.log(this.updated);
+    },
+
+    preloadImage() {
+      this.updated = true;
+      let input = this.$refs.newAvatar;
+      let file = input.files;
+
+      if (file && file[0]) {
+        this.image = file[0];
+
+        let reader = new FileReader();
+        reader.onload = (e) => {
+          this.avatarPreview = e.target.result;
+        };
+        reader.readAsDataURL(file[0]);
+      }
     },
 
     async deleteAccount() {
@@ -218,6 +240,41 @@ export default {
         query: { accountDeleted: true },
       });
     },
+
+    async updateProfile() {
+      const newProfile = new FormData();
+
+      if (this.user.email !== this.$store.getters.user.email) {
+        newProfile.append('email', this.user.email);
+      }
+
+      if (this.user.role !== this.$store.getters.user.role) {
+        newProfile.append('role', this.user.role);
+      }
+
+      if (this.image) {
+        newProfile.append('image', this.image);
+      }
+
+      newProfile.append('uid', this.$store.getters.user.uuid);
+
+      const headers = setHeaders();
+
+      const response = await fetch(
+        `${this.API_URL}/users/${this.$store.getters.user.uuid}`,
+        {
+          method: 'PUT',
+          body: newProfile,
+          headers,
+        }
+      );
+
+      if (!response.ok) {
+        return;
+      }
+
+      console.log('Done!');
+    },
   },
 
   mounted() {
@@ -230,5 +287,17 @@ export default {
 <style scoped>
 .avatar-action {
   background-color: rgba(0, 0, 0, 0.4);
+}
+
+.avatar-container {
+  width: 180px;
+  height: 180px;
+  overflow: hidden;
+}
+
+#avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 </style>

@@ -1,5 +1,12 @@
 const { Post, User, Comment } = require('../models');
-const fs = require('fs/promises');
+
+
+exports.update = async ctx => {
+  console.log(ctx.request.body)
+  ctx.body = {
+    status: 'success',
+  }
+}
 
 exports.delete = async ctx => {
   const { uuid } = ctx.params;
@@ -47,15 +54,5 @@ exports.delete = async ctx => {
 
   ctx.body = {
     message: "User has been deleted"
-  }
-}
-
-exports.update = async ctx => {
-  const { body } = ctx.request;
-
-  console.log(body)
-
-  ctx.body = {
-    body
   }
 }
