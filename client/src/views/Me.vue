@@ -270,8 +270,13 @@ export default {
       );
 
       if (!response.ok) {
+        console.log('Impossible de mettre à jour le profil');
         return;
       }
+
+      const result = await response.json();
+
+      await this.$store.dispatch('updateUser', result.user);
 
       console.log('Done!');
     },

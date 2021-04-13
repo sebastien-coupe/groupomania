@@ -37,6 +37,12 @@ export default createStore({
 
       localStorage.removeItem('token')
       localStorage.removeItem('user')
+    },
+
+    updateUser(context, user) {
+      context.commit('setUser', user);
+      localStorage.removeItem('user');
+      localStorage.setItem('user', JSON.stringify(user));
     }
   },
   modules: {
