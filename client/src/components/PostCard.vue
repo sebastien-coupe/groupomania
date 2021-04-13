@@ -72,16 +72,18 @@
       class="d-flex align-items-center px-3 pb-3 pt-4"
     >
       <!-- TODO: Make it dynamic -->
-      <div>
-        <button type="button" class="btn btn-outline-success btn-sm">
-          <i class="bi bi-arrow-up-short"></i>
-        </button>
-        <button type="button" class="btn btn-outline-danger btn-sm ms-1">
-          <i class="bi bi-arrow-down-short"></i>
-        </button>
+      <div class="d-flex flex-wrap align-items-center justify-content-center">
+        <div class="flex-shrink-none mb-2">
+          <button type="button" class="btn btn-outline-success btn-sm">
+            <i class="bi bi-arrow-up-short"></i>
+          </button>
+          <button type="button" class="btn btn-outline-danger btn-sm ms-1">
+            <i class="bi bi-arrow-down-short"></i>
+          </button>
+        </div>
+        <div class="mx-3 small text-secondary text-success mb-2">+32 votes</div>
       </div>
-      <div class="ms-3 small text-secondary text-success">+32 votes</div>
-      <div class="ms-auto">
+      <div class="ms-auto mb-2">
         <button
           @click="toggleComments(post.uuid)"
           class="btn btn-link btn-sm text-decoration-none"

@@ -2,9 +2,9 @@
   <div class="m-auto">
     <div class="container">
       <div class="row">
-        <div class="col-6">
+        <div class="col-md-6">
           <img
-            class="mt-5 mb-3"
+            class="img-fluid mt-5 mb-3"
             src="@/assets/logo.png"
             alt="groupomania logo"
           />
@@ -19,8 +19,8 @@
             >
           </p>
         </div>
-        <div class="col-6">
-          <div class="card shadow-sm ms-5 p-5">
+        <div class="col-md-6">
+          <div class="card shadow-sm ms-md-5 p-3 p-md-4 mt-4 mt-md-0">
             <form @submit.prevent="submitForm" novalidate>
               <div class="mb-2">
                 <label for="lastname" class="form-label">Nom</label>
