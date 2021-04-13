@@ -3,6 +3,7 @@ const serve = require('koa-static');
 const path = require('path');
 const mount = require('koa-mount');
 const bodyParser = require('koa-bodyparser');
+const helmet = require('koa-helmet');
 const errorHandler = require('./middlewares/errorHandlerMiddleware');
 
 const app = new Koa();
@@ -14,6 +15,7 @@ const userRouter = require('./routes/userRoutes');
 
 app.use(errorHandler);
 app.use(bodyParser());
+app.use(helmet())
 
 app.use(mount('/public', serve(path.join(__dirname, '/public'))));
 
