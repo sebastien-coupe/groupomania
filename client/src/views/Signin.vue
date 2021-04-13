@@ -48,7 +48,11 @@
               Identifiants incorrects
             </div>
 
-            <form @submit.prevent="submitForm">
+            <form
+              @submit.prevent="submitForm"
+              class="needs-validation"
+              novalidate
+            >
               <div class="mb-2">
                 <label for="email" class="form-label">Adresse email</label>
                 <input
@@ -64,8 +68,9 @@
                   id="email"
                   v-model="email"
                   class="form-control form-control-lg"
+                  :class="errors.email ? 'is-invalid' : ''"
                 />
-                <span v-if="errors.email" class="small text-danger">{{
+                <span v-if="errors.email" class="invalid-feedback">{{
                   errors.email
                 }}</span>
               </div>
@@ -84,8 +89,9 @@
                   id="password"
                   v-model="password"
                   class="form-control form-control-lg"
+                  :class="errors.password ? 'is-invalid' : ''"
                 />
-                <span v-if="errors.password" class="small text-danger">{{
+                <span v-if="errors.password" class="invalid-feedback">{{
                   errors.password
                 }}</span>
               </div>

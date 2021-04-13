@@ -36,8 +36,9 @@
                   id="lastname"
                   v-model="lastname"
                   class="form-control form-control-lg"
+                  :class="errors.lastname ? 'is-invalid' : ''"
                 />
-                <span v-if="errors.lastname" class="small text-danger">{{
+                <span v-if="errors.lastname" class="invalid-feedback">{{
                   errors.lastname
                 }}</span>
               </div>
@@ -55,8 +56,9 @@
                   id="firstname"
                   v-model="firstname"
                   class="form-control form-control-lg"
+                  :class="errors.firstname ? 'is-invalid' : ''"
                 />
-                <span v-if="errors.firstname" class="small text-danger">{{
+                <span v-if="errors.firstname" class="invalid-feedback">{{
                   errors.firstname
                 }}</span>
               </div>
@@ -74,8 +76,9 @@
                   id="email"
                   v-model="email"
                   class="form-control form-control-lg"
+                  :class="errors.email ? 'is-invalid' : ''"
                 />
-                <span v-if="errors.email" class="small text-danger">{{
+                <span v-if="errors.email" class="invalid-feedback">{{
                   errors.email
                 }}</span>
               </div>
@@ -95,8 +98,9 @@
                   id="password"
                   v-model="password"
                   class="form-control form-control-lg"
+                  :class="errors.password ? 'is-invalid' : ''"
                 />
-                <span v-if="errors.password" class="small text-danger">{{
+                <span v-if="errors.password" class="invalid-feedback">{{
                   errors.password
                 }}</span>
               </div>
