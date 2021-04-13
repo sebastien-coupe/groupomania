@@ -135,7 +135,7 @@
                         Annuler
                       </button>
                       <button
-                        @click="deleteAccount"
+                        @click.prevent="deleteAccount"
                         class="btn btn-danger btn-sm ms-2"
                       >
                         Confirmer
@@ -166,8 +166,12 @@
 </template>
 
 <script>
+import setHeaders from '@/helpers/setHeaders';
+
 export default {
   name: 'Me',
+
+  inject: ['API_URL'],
 
   data() {
     return {
@@ -190,8 +194,29 @@ export default {
       console.log(this.updated);
     },
 
-    deleteAccount() {
-      // TODO
+    async deleteAccount() {
+      const headers = setHeaders();
+
+      const response = await fetch(
+        `${this.API_URL}/users/${this.$store.getters.user.uuid}`,
+        {
+          method: 'DELETE',
+          headers,
+        }
+      );
+
+      console.log(response);
+
+      if (!response.ok) {
+        console.log('Impossible de supprimer le compte');
+        return;
+      }
+
+      await this.$store.dispatch('logout');
+      await this.$router.push({
+        name: 'Signin',
+        query: { accountDeleted: true },
+      });
     },
   },
 

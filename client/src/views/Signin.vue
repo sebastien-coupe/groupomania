@@ -1,5 +1,17 @@
 <template>
   <div class="m-auto">
+    <div v-if="showAccountDeletedMessage" class="container">
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        Votre Compte a bien été supprimé
+        <button
+          @click="dismissAccountDeletedMessage"
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+    </div>
     <div class="container">
       <div class="row">
         <div class="col-6">
@@ -23,14 +35,14 @@
           <div class="card shadow-sm ms-5 p-5">
             <div
               v-if="showSuccessMessage"
-              class="alert alert-success mb-3"
+              class="alert alert-success mb-3 mt-0"
               role="alert"
             >
               Inscription réussie !
             </div>
             <div
               v-if="showErrorMessage"
-              class="alert alert-danger mb-3"
+              class="alert alert-danger mb-3 mt-0"
               role="alert"
             >
               Identifiants incorrects
@@ -100,6 +112,7 @@ export default {
       password: '',
       showSuccessMessage: false,
       showErrorMessage: false,
+      showAccountDeletedMessage: false,
       errors: {},
     };
   },
@@ -148,12 +161,21 @@ export default {
 
       return Object.keys(this.errors).length === 0;
     },
+
+    dismissAccountDeletedMessage() {
+      this.showAccountDeletedMessage = false;
+      this.$router.replace({ query: '' });
+    },
   },
 
   mounted() {
     if (this.$route.query.email) {
       this.email = this.$route.query.email;
       this.showSuccessMessage = true;
+    }
+
+    if (this.$route.query.accountDeleted) {
+      this.showAccountDeletedMessage = true;
     }
   },
 };
