@@ -16,7 +16,9 @@
           </router-link>
           <router-link v-else :to="{ name: 'Me' }" class="nav-link">
             <div class="d-flex align-items-center">
-              <img :src="avatar" class="avatar rounded" alt="avatar" />
+              <div class="avatar-thumbnail-xs">
+                <img :src="avatar" class="avatar-image" alt="avatar" />
+              </div>
               <span class="ms-2">Mon compte</span>
             </div>
           </router-link>
@@ -78,8 +80,10 @@ export default {
   font-size: 0.875rem;
 }
 
-.avatar {
-  width: 18px;
-  height: 18px;
+.avatar-thumbnail-xs {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  overflow: hidden;
 }
 </style>

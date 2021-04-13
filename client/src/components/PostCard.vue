@@ -1,7 +1,9 @@
 <template>
   <div class="card shadow-sm">
     <div class="d-flex align-items-center px-3 pt-3">
-      <img class="thumbnail d-block" :src="post.author.avatarUrl" alt="" />
+      <div class="avatar-thumbnail">
+        <img class="avatar-image" :src="post.author.avatarUrl" alt="" />
+      </div>
       <div class="d-block ms-3 lh-sm">
         <span class="d-block fw-bolder"
           ><a href="#" class="text-decoration-none text-body"
@@ -237,8 +239,16 @@ export default {
   margin-top: 40px;
 }
 
-.thumbnail {
-  width: 48px;
+.avatar-thumbnail {
+  width: 62px;
+  height: 62px;
   border-radius: 50%;
+  overflow: hidden;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 </style>

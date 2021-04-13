@@ -1,11 +1,13 @@
 <template>
   <div class="card shadow-sm">
     <div class="d-flex align-items-center p-3">
-      <img
-        class="thumbnail-sm d-block"
-        :src="$store.getters.user.avatarUrl"
-        alt=""
-      />
+      <div class="avatar-thumbnail-sm">
+        <img
+          class="avatar-image d-block"
+          :src="$store.getters.user.avatarUrl"
+          alt=""
+        />
+      </div>
       <div class="d-block ms-3 lh-sm">
         <span class="fs-5 text-secondary">Quoi de neuf ?</span>
       </div>
@@ -163,8 +165,10 @@ export default {
 </script>
 
 <style>
-.thumbnail-sm {
-  width: 32px;
+.avatar-thumbnail-sm {
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
+  overflow: hidden;
 }
 </style>
