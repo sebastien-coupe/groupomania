@@ -1,7 +1,12 @@
 <template>
   <div class="container">
-    <div>Bienvenue {{ user.firstName }}</div>
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <router-link
+      :to="{ name: 'Feed' }"
+      class="d-inline-flex align-items-center text-decoration-none"
+    >
+      <i class="bi bi-arrow-left fs-5"></i><span class="ms-2">Retour</span>
+    </router-link>
+    <ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
         <button
           class="nav-link active"
@@ -39,10 +44,26 @@
         aria-labelledby="home-tab"
       >
         <form>
-          <div class="row align-items-center">
+          <div class="row align-items-start">
             <div class="col-4">
-              <img :src="user.avatarUrl" alt="" />
-              <input type="file" name="" id="" />
+              <div class="d-flex justify-content-center flex-wrap mt-5">
+                <div class="position-relative">
+                  <img :src="user.avatarUrl" id="user-avatar" alt="avatar" />
+                  <div
+                    class="w-100 position-absolute bottom-0 text-center avatar-action"
+                  >
+                    <button
+                      @click.prevent="changeAvatar = !changeAvatar"
+                      class="btn btn-link btn-sm text-decoration-none text-white"
+                    >
+                      {{ changeAvatar ? 'Annuler' : 'Changer' }}
+                    </button>
+                  </div>
+                </div>
+                <div v-if="changeAvatar" class="mt-3">
+                  <input class="form-control form-control-sm" type="file" />
+                </div>
+              </div>
             </div>
             <div class="col-8">
               <div class="mb-3">
@@ -83,10 +104,45 @@
                   class="form-control"
                 />
               </div>
-              <div class="mt-5 text-end">
+              <div class="d-flex justify-content-between mt-5">
+                <button
+                  @click.prevent="showConfirm = true"
+                  class="btn btn-danger btn-sm"
+                  :disabled="showConfirm"
+                >
+                  Supprimer mon compte
+                </button>
                 <button :disabled="!updated" class="btn btn-primary btn-sm">
                   Mettre à jour
                 </button>
+              </div>
+              <div v-if="showConfirm" class="mb-3">
+                <div class="alert alert-danger d-flex align-items-start">
+                  <div>
+                    <i class="bi bi-exclamation-triangle-fill fs-1 px-3"></i>
+                  </div>
+                  <div class="flex-grow-1 ms-5">
+                    <p>
+                      Vous êtes sur le point de supprimer votre compte, cette
+                      opération est irréversible, êtes vous sûr de vouloir
+                      continuer ?
+                    </p>
+                    <div class="text-end">
+                      <button
+                        @click="showConfirm = false"
+                        class="btn btn-success btn-sm"
+                      >
+                        Annuler
+                      </button>
+                      <button
+                        @click="deleteAccount"
+                        class="btn btn-danger btn-sm ms-2"
+                      >
+                        Confirmer
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -117,6 +173,8 @@ export default {
     return {
       user: {},
       updated: false,
+      showConfirm: false,
+      changeAvatar: false,
     };
   },
 
@@ -131,6 +189,10 @@ export default {
       this.updated = false;
       console.log(this.updated);
     },
+
+    deleteAccount() {
+      // TODO
+    },
   },
 
   mounted() {
@@ -139,3 +201,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.avatar-action {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+</style>

@@ -2,11 +2,7 @@
   <div class="comment">
     <div class="d-flex align-items-start">
       <div class="comment-avatar d-none d-sm-block overflow-hidden mt-2">
-        <img
-          src="http://localhost:3000/public/avatar_default.png"
-          alt=""
-          class="w-100 h-100"
-        />
+        <img :src="comment.author.avatarUrl" alt="" class="w-100 h-100" />
       </div>
       <div class="flex-grow-1 ms-sm-3">
         <div class="py-2 px-3 rounded-3 bg-light shadow-sm">
