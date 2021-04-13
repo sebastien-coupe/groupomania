@@ -13,7 +13,7 @@ exports.signup = async ctx => {
   if (!email || !validator.isEmail(email)) ctx.throw(422, 'Email is not valid');
   if (!password || !validator.isLength(password, { min: 8 })) ctx.throw(422, 'Password is too weak');
 
-  const defaultAvatarUrl = `${ctx.protocol}://${ctx.host}/public/avatar_default.png`;
+  const defaultAvatarUrl = `${ctx.protocol}://${ctx.host}/public/avatars/default/${firstname[0].toLowerCase()}.png`;
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
