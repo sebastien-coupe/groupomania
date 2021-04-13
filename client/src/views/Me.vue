@@ -57,6 +57,9 @@
               </div>
             </div>
             <div class="col-8">
+              <div v-if="saved" class="alert alert-success mt-2">
+                Profil mis à jour avec succès.
+              </div>
               <div class="mb-3">
                 <label for="lastName" class="form-label"
                   >Utiliser un avatar personalisé</label
@@ -69,7 +72,7 @@
                   id="image"
                 />
                 <div class="form-text">
-                  Formats: jpg, jpeg, png Max: 180x180px
+                  Formats: jpg, jpeg, png. Max: 180x180px
                 </div>
               </div>
               <div class="mb-3">
@@ -134,7 +137,7 @@
                     <div class="text-end">
                       <button
                         @click="showConfirm = false"
-                        class="btn btn-success btn-sm"
+                        class="btn btn-outline-danger btn-sm"
                       >
                         Annuler
                       </button>
@@ -185,6 +188,7 @@ export default {
       updated: false,
       showConfirm: false,
       changeAvatar: false,
+      saved: false,
     };
   },
 
@@ -278,7 +282,7 @@ export default {
 
       await this.$store.dispatch('updateUser', result.user);
 
-      console.log('Done!');
+      this.saved = true;
     },
   },
 
