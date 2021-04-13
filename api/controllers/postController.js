@@ -77,13 +77,13 @@ exports.update = async ctx => {
     post.body = update.body
   }
 
-  if (imageUrl) {
+  if (imageUrl !== '') {
     post.imageUrl = imageUrl
   }
 
-  console.log(update.delImg)
+  console.log('supprimer l\'image ? ', update.delImg)
 
-  if (!imageUrl && update.delImg) {
+  if (update.delImg === true) {
     const associatedImageFile = post.imageUrl ? post.imageUrl.split('/uploads/')[1] : null;
 
     if (associatedImageFile) {

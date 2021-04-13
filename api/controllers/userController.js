@@ -2,9 +2,33 @@ const { Post, User, Comment } = require('../models');
 
 
 exports.update = async ctx => {
-  console.log(ctx.request.body)
+  const update = ctx.request.body;
+  const avatar = ctx.file ? `${ctx.protocol}://${ctx.host}/${ctx.file.path}` : '';
+  const { uuid } = ctx.params;
+
+  const user = await User.findOne({
+    where: {
+      uuid
+    }
+  });
+
+  if (update.email) {
+    user.email = update.email
+  }
+
+  if (update.role) {
+    user.role = update.role
+  }
+
+  if (avatar) {
+    user.avatarUrl = avatar
+  }
+
+  await user.save();
+
   ctx.body = {
     status: 'success',
+    user
   }
 }
 

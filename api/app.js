@@ -2,7 +2,7 @@ const Koa = require('koa');
 const serve = require('koa-static');
 const path = require('path');
 const mount = require('koa-mount');
-const bodyParser = require('koa-body');
+const bodyParser = require('koa-bodyparser');
 const errorHandler = require('./middlewares/errorHandlerMiddleware');
 
 const app = new Koa();
