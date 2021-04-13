@@ -49,3 +49,13 @@ exports.delete = async ctx => {
     message: "User has been deleted"
   }
 }
+
+exports.update = async ctx => {
+  const { body } = ctx.request;
+
+  console.log(body)
+
+  ctx.body = {
+    body
+  }
+}
