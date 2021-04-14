@@ -5,14 +5,14 @@
         <img class="avatar-image" :src="post.author.avatarUrl" alt="" />
       </div>
       <div class="d-block ms-3 lh-sm">
-        <span class="d-block fw-bolder"
-          ><a href="#" class="text-decoration-none text-body"
+        <div class="d-block fw-bolder">
+          <a href="#" class="text-decoration-none text-body"
             >{{ post.author.firstName }} {{ post.author.lastName }}</a
-          ></span
-        >
+          >
+        </div>
         <!-- To be formatted -->
         <span class="d-block text-secondary small mt-1">{{
-          post.author.role || 'Employé'
+          post.author.role
         }}</span>
       </div>
       <div v-if="!post.hasBeenReported" class="ms-auto">
@@ -37,7 +37,18 @@
           </button>
         </div>
         <div v-else class="py-3">
-          <button @click="reportItem(post)" class="btn btn-primary btn-sm">
+          <button
+            v-if="$store.getters.user.isAdmin"
+            @click="deleteItem(post)"
+            class="btn btn-danger btn-sm"
+          >
+            Supprimer
+          </button>
+          <button
+            v-else
+            @click="reportItem(post)"
+            class="btn btn-primary btn-sm"
+          >
             Signaler
           </button>
         </div>
@@ -171,7 +182,11 @@ export default {
     },
 
     async deleteItem(post) {
-      if (post.author.uuid !== this.$store.getters.user.uuid) return;
+      if (
+        this.$store.getters.user.idAdmin === false &&
+        post.author.uuid !== this.$store.getters.user.uuid
+      )
+        return;
 
       const headers = setHeaders({ json: true });
 
