@@ -10,9 +10,9 @@ const userController = require('../controllers/userController');
 
 const tokenValidation = require('../middlewares/tokenValidationMiddleware');
 
-const imageUpload = require('../middlewares/imageUploadMiddleware');
+const avatarUpload = require('../middlewares/avatarUploadMiddleware');
 
-router.put('/:uuid', tokenValidation, imageUpload, userController.update);
+router.put('/:uuid', tokenValidation, avatarUpload, userController.update);
 
 router.delete('/:uuid', tokenValidation, userController.delete);
 
