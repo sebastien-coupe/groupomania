@@ -45,117 +45,6 @@
         aria-labelledby="home-tab"
       >
         <ProfileForm :user="user" />
-        <!-- <form @submit.prevent="updateProfile">
-          <div class="row align-items-start">
-            <div class="col-4">
-              <div class="d-flex justify-content-center mt-3">
-                <div class="avatar-container">
-                  <img
-                    :src="avatarPreview || user.avatarUrl"
-                    alt="avatar"
-                    id="avatar"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="col-8">
-              <div v-if="saved" class="alert alert-success mt-2">
-                Profil mis à jour avec succès.
-              </div>
-              <div class="mb-3">
-                <label for="lastName" class="form-label"
-                  >Utiliser un avatar personalisé</label
-                >
-                <input
-                  @change="preloadImage"
-                  ref="newAvatar"
-                  class="form-control"
-                  type="file"
-                  id="image"
-                />
-                <div class="form-text">
-                  Formats: jpg, jpeg, png. Max: 180x180px
-                </div>
-              </div>
-              <div class="mb-3">
-                <label for="lastName" class="form-label">Nom</label>
-                <input
-                  v-model="user.lastName"
-                  type="text"
-                  class="form-control"
-                  disabled
-                />
-              </div>
-              <div class="mb-3">
-                <label for="firstName" class="form-label">Prénom</label>
-                <input
-                  v-model="user.firstName"
-                  type="text"
-                  class="form-control"
-                  disabled
-                />
-              </div>
-              <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input
-                  @keyup="compare"
-                  v-model="user.email"
-                  type="email"
-                  class="form-control"
-                />
-              </div>
-              <div class="mb-3">
-                <label for="post" class="form-label">Poste</label>
-                <input
-                  @keyup="compare"
-                  v-model="user.role"
-                  type="poste"
-                  class="form-control"
-                />
-              </div>
-              <div class="d-flex justify-content-between mt-5">
-                <button
-                  @click.prevent="showConfirm = true"
-                  class="btn btn-danger btn-sm"
-                  :disabled="showConfirm"
-                >
-                  Supprimer mon compte
-                </button>
-                <button :disabled="!updated" class="btn btn-primary btn-sm">
-                  Mettre à jour
-                </button>
-              </div>
-              <div v-if="showConfirm" class="mb-3">
-                <div class="alert alert-danger d-flex align-items-start">
-                  <div>
-                    <i class="bi bi-exclamation-triangle-fill fs-1 px-3"></i>
-                  </div>
-                  <div class="flex-grow-1 ms-5">
-                    <p>
-                      Vous êtes sur le point de supprimer votre compte, cette
-                      opération est irréversible, êtes vous sûr de vouloir
-                      continuer ?
-                    </p>
-                    <div class="text-end">
-                      <button
-                        @click="showConfirm = false"
-                        class="btn btn-outline-danger btn-sm"
-                      >
-                        Annuler
-                      </button>
-                      <button
-                        @click.prevent="deleteAccount"
-                        class="btn btn-danger btn-sm ms-2"
-                      >
-                        Confirmer
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form> -->
       </div>
       <div
         v-if="user.isAdmin"
@@ -164,46 +53,10 @@
         role="tabpanel"
         aria-labelledby="profile-tab"
       >
-        <h1 class="fs-4">Liste des publications signalées</h1>
-        <Loader v-if="isLoading" />
-        <div v-else>
-          <div v-if="reportedPosts.length">
-            <div
-              class="card shadow-sm mt-3"
-              v-for="post in reportedPosts"
-              :key="post.uuid"
-            >
-              <div class="d-sm-flex">
-                <div class="card-body">
-                  <div>
-                    <span class="fs-5 fw-bold"
-                      >{{ post.author.firstName }}
-                      {{ post.author.lastName }}</span
-                    >
-                    <span class="fst-italic text-secondary"> a publié:</span>
-                  </div>
-                  <p>{{ post.body }}</p>
-                  <img v-if="post.imageUrl" :src="post.imageUrl" alt="" />
-                </div>
-                <div class="d-grid gap-2 p-3">
-                  <button
-                    @click="deletePost(post.uuid)"
-                    class="btn btn-danger btn-sm d-block"
-                  >
-                    Supprimer
-                  </button>
-                  <button
-                    @click="restorePost(post.uuid)"
-                    class="btn btn-success btn-sm d-block"
-                  >
-                    Autoriser
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div v-else>Aucun post à modérer</div>
-        </div>
+        <ModerationList
+          :reportedPosts="reportedPosts"
+          @removeFromReportedPosts="updateModerationList"
+        />
       </div>
     </div>
   </div>
@@ -211,8 +64,8 @@
 
 <script>
 import ProfileForm from '@/components/ProfileForm';
+import ModerationList from '@/components/ModerationList';
 
-import Loader from '@/components/TheLoader';
 import setHeaders from '@/helpers/setHeaders';
 
 export default {
@@ -222,20 +75,13 @@ export default {
 
   components: {
     ProfileForm,
-    Loader,
+    ModerationList,
   },
 
   data() {
     return {
       user: {},
-      // image: '',
-      // avatarPreview: '',
-      // updated: false,
-      // showConfirm: false,
-      // changeAvatar: false,
-      // saved: false,
       reportedPosts: [],
-      isLoading: false,
     };
   },
 
@@ -264,41 +110,9 @@ export default {
       this.isLoading = false;
     },
 
-    async deletePost(uuid) {
-      const headers = setHeaders();
-
-      const response = await fetch(`${this.API_URL}/posts/${uuid}`, {
-        method: 'DELETE',
-        headers,
-      });
-
-      if (!response.ok) {
-        return;
-      }
-
-      const result = await response.json();
-
+    updateModerationList(uuid) {
       this.reportedPosts = this.reportedPosts.filter((post) => {
-        return post.uuid != result.uuid;
-      });
-    },
-
-    async restorePost(uuid) {
-      const headers = setHeaders();
-
-      const response = await fetch(`${this.API_URL}/posts/${uuid}/restore`, {
-        method: 'GET',
-        headers,
-      });
-
-      if (!response.ok) {
-        return;
-      }
-
-      const result = await response.json();
-
-      this.reportedPosts = this.reportedPosts.filter((post) => {
-        return post.uuid != result.uuid;
+        return post.uuid != uuid;
       });
     },
   },
