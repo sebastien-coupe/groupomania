@@ -24,7 +24,7 @@ const storage = multer.diskStorage({
 
     // Get extension matching mimetype
     const extension = MIME_TYPES[file.mimetype];
-    callback(null, fileName + '_' + Date.now() + '.' + extension);
+    callback(null, 'avatar_' + fileName + '_' + Date.now() + '.' + extension);
   }
 });
 

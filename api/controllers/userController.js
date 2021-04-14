@@ -1,4 +1,5 @@
 const { Post, User, Comment } = require('../models');
+const fs = require('fs/promises');
 
 
 exports.update = async ctx => {
@@ -40,6 +41,12 @@ exports.delete = async ctx => {
       uuid
     }
   });
+
+  const userAvatar = user.avatarUrl ? user.avatarUrl.split('/avatars/')[1] : null;
+
+  if (userAvatar && userAvatar.startsWith('avatar')) {
+    await fs.unlink(`public/avatars/${userAvatar}`);
+  }
 
   await Comment.destroy({
     where: {
