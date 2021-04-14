@@ -3,41 +3,53 @@
     <h1 class="fs-4">Liste des publications signalées</h1>
     <Loader v-if="isLoading" />
     <div v-else>
-      <div v-if="reportedPosts.length">
-        <div
-          class="card shadow-sm mt-3"
-          v-for="post in reportedPosts"
-          :key="post.uuid"
-        >
-          <div class="d-sm-flex">
-            <div class="card-body">
-              <div>
-                <span class="fs-5 fw-bold"
-                  >{{ post.author.firstName }} {{ post.author.lastName }}</span
-                >
-                <span class="fst-italic text-secondary"> a publié:</span>
+      <div class="row">
+        <div class="col-12 col-md-8 offset-md-2" v-if="reportedPosts.length">
+          <div
+            class="card shadow-sm mt-4"
+            v-for="post in reportedPosts"
+            :key="post.uuid"
+          >
+            <div class="card-header p-3">
+              <div class="d-flex flex-column flex-sm-row align-items-sm-center">
+                <div class="d-block">
+                  <span class="d-block fst-italic text-secondary small"
+                    >Publication de:</span
+                  >
+                  <span class="d-block fs-5 fw-bold"
+                    >{{ post.author.firstName }}
+                    {{ post.author.lastName }}</span
+                  >
+                </div>
+                <div class="text-end mt-4 mt-sm-0 ms-sm-auto">
+                  <button
+                    @click="deletePost(post.uuid)"
+                    class="btn btn-danger btn-sm"
+                  >
+                    Supprimer
+                  </button>
+                  <button
+                    @click="restorePost(post.uuid)"
+                    class="ms-3 btn btn-success btn-sm"
+                  >
+                    Autoriser
+                  </button>
+                </div>
               </div>
-              <p>{{ post.body }}</p>
-              <img v-if="post.imageUrl" :src="post.imageUrl" alt="" />
             </div>
-            <div class="d-grid gap-2 p-3">
-              <button
-                @click="deletePost(post.uuid)"
-                class="btn btn-danger btn-sm d-block"
-              >
-                Supprimer
-              </button>
-              <button
-                @click="restorePost(post.uuid)"
-                class="btn btn-success btn-sm d-block"
-              >
-                Autoriser
-              </button>
+            <div class="card-body">
+              <p>{{ post.body }}</p>
+              <img
+                v-if="post.imageUrl"
+                :src="post.imageUrl"
+                class="img-fluid"
+                alt=""
+              />
             </div>
           </div>
         </div>
+        <div v-else>Aucun post à modérer</div>
       </div>
-      <div v-else>Aucun post à modérer</div>
     </div>
   </div>
 </template>
