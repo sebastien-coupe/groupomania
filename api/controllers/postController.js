@@ -2,10 +2,18 @@ const { Post, User, Comment } = require('../models');
 const fs = require('fs/promises');
 
 exports.findAll = async ctx => {
-  const posts = await Post.findAll({
+  const { filter } = ctx.query;
+
+  const query = {
     include: 'author',
-    order: [['createdAt', 'desc']]
-  });
+    order: [['createdAt', 'DESC']]
+  }
+
+  if (filter) {
+    query.where = { [filter]: true }
+  }
+
+  const posts = await Post.findAll(query);
 
   ctx.body = {
     status: 'success',
@@ -144,6 +152,26 @@ exports.report = async ctx => {
 
   const [result] = await Post.update(
     { hasBeenReported: true },
+    {
+      where: {
+        uuid
+      }
+    }
+  );
+
+  if (!result) ctx.throw(400, 'No post matching uuid')
+
+  ctx.body = {
+    status: 'success',
+    uuid
+  }
+}
+
+exports.restore = async ctx => {
+  const { uuid } = ctx.params;
+
+  const [result] = await Post.update(
+    { hasBeenReported: false },
     {
       where: {
         uuid

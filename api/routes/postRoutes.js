@@ -24,4 +24,6 @@ router.del('/:uuid', tokenValidation, postController.delete);
 
 router.get('/:uuid/report', tokenValidation, postController.report);
 
+router.get('/:uuid/restore', tokenValidation, postController.restore);
+
 module.exports = router;

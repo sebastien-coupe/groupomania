@@ -23,6 +23,7 @@
       </li>
       <li v-if="user.isAdmin" class="nav-item" role="presentation">
         <button
+          @click="loadReportedPosts"
           class="nav-link"
           id="profile-tab"
           data-bs-toggle="tab"
@@ -162,23 +163,63 @@
         role="tabpanel"
         aria-labelledby="profile-tab"
       >
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi et
-        culpa perferendis minima beatae similique inventore quia porro
-        obcaecati, enim laborum, cum qui accusamus sequi reprehenderit suscipit
-        dignissimos animi aliquid. Eligendi voluptate sunt a dolores repudiandae
-        molestiae minima voluptas? Adipisci.
+        <h1 class="fs-4">Liste des publications signalées</h1>
+        <Loader v-if="isLoading" />
+        <div v-else>
+          <div v-if="reportedPosts.length">
+            <div
+              class="card shadow-sm mt-3"
+              v-for="post in reportedPosts"
+              :key="post.uuid"
+            >
+              <div class="d-sm-flex">
+                <div class="card-body">
+                  <div>
+                    <span class="fs-5 fw-bold"
+                      >{{ post.author.firstName }}
+                      {{ post.author.lastName }}</span
+                    >
+                    <span class="fst-italic text-secondary"> a publié:</span>
+                  </div>
+                  <p>{{ post.body }}</p>
+                  <img v-if="post.imageUrl" :src="post.imageUrl" alt="" />
+                </div>
+                <div class="d-grid gap-2 p-3">
+                  <button
+                    @click="deletePost(post.uuid)"
+                    class="btn btn-danger btn-sm d-block"
+                  >
+                    Supprimer
+                  </button>
+                  <button
+                    @click="restorePost(post.uuid)"
+                    class="btn btn-success btn-sm d-block"
+                  >
+                    Autoriser
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div v-else>Aucun post à modérer</div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Loader from '@/components/TheLoader';
 import setHeaders from '@/helpers/setHeaders';
 
 export default {
   name: 'Me',
 
   inject: ['API_URL'],
+
+  components: {
+    Loader,
+  },
 
   data() {
     return {
@@ -189,6 +230,8 @@ export default {
       showConfirm: false,
       changeAvatar: false,
       saved: false,
+      reportedPosts: [],
+      isLoading: false,
     };
   },
 
@@ -218,6 +261,30 @@ export default {
         };
         reader.readAsDataURL(file[0]);
       }
+    },
+
+    async loadReportedPosts() {
+      this.isLoading = true;
+      const headers = setHeaders();
+
+      const response = await fetch(
+        `${this.API_URL}/posts?filter=hasBeenReported`,
+        {
+          method: 'GET',
+          headers,
+        }
+      );
+
+      if (!response.ok) {
+        console.log('Impossible de récupérer les posts');
+        return;
+      }
+
+      const result = await response.json();
+
+      this.reportedPosts = result.posts;
+
+      this.isLoading = false;
     },
 
     async deleteAccount() {
@@ -284,11 +351,48 @@ export default {
 
       this.saved = true;
     },
+
+    async deletePost(uuid) {
+      const headers = setHeaders();
+
+      const response = await fetch(`${this.API_URL}/posts/${uuid}`, {
+        method: 'DELETE',
+        headers,
+      });
+
+      if (!response.ok) {
+        return;
+      }
+
+      const result = await response.json();
+
+      this.reportedPosts = this.reportedPosts.filter((post) => {
+        return post.uuid != result.uuid;
+      });
+    },
+
+    async restorePost(uuid) {
+      const headers = setHeaders();
+
+      const response = await fetch(`${this.API_URL}/posts/${uuid}/restore`, {
+        method: 'GET',
+        headers,
+      });
+
+      if (!response.ok) {
+        return;
+      }
+
+      const result = await response.json();
+
+      this.reportedPosts = this.reportedPosts.filter((post) => {
+        return post.uuid != result.uuid;
+      });
+    },
   },
 
   mounted() {
     this.user = { ...this.$store.getters.user };
-    console.log(this.user);
   },
 };
 </script>
