@@ -44,7 +44,8 @@
         role="tabpanel"
         aria-labelledby="home-tab"
       >
-        <form @submit.prevent="updateProfile">
+        <ProfileForm :user="user" />
+        <!-- <form @submit.prevent="updateProfile">
           <div class="row align-items-start">
             <div class="col-4">
               <div class="d-flex justify-content-center mt-3">
@@ -154,7 +155,7 @@
               </div>
             </div>
           </div>
-        </form>
+        </form> -->
       </div>
       <div
         v-if="user.isAdmin"
@@ -209,6 +210,8 @@
 </template>
 
 <script>
+import ProfileForm from '@/components/ProfileForm';
+
 import Loader from '@/components/TheLoader';
 import setHeaders from '@/helpers/setHeaders';
 
@@ -218,51 +221,25 @@ export default {
   inject: ['API_URL'],
 
   components: {
+    ProfileForm,
     Loader,
   },
 
   data() {
     return {
       user: {},
-      image: '',
-      avatarPreview: '',
-      updated: false,
-      showConfirm: false,
-      changeAvatar: false,
-      saved: false,
+      // image: '',
+      // avatarPreview: '',
+      // updated: false,
+      // showConfirm: false,
+      // changeAvatar: false,
+      // saved: false,
       reportedPosts: [],
       isLoading: false,
     };
   },
 
   methods: {
-    compare() {
-      if (
-        JSON.stringify(this.user) !== JSON.stringify(this.$store.getters.user)
-      ) {
-        this.updated = true;
-        return;
-      }
-      this.updated = false;
-      console.log(this.updated);
-    },
-
-    preloadImage() {
-      this.updated = true;
-      let input = this.$refs.newAvatar;
-      let file = input.files;
-
-      if (file && file[0]) {
-        this.image = file[0];
-
-        let reader = new FileReader();
-        reader.onload = (e) => {
-          this.avatarPreview = e.target.result;
-        };
-        reader.readAsDataURL(file[0]);
-      }
-    },
-
     async loadReportedPosts() {
       this.isLoading = true;
       const headers = setHeaders();
@@ -285,71 +262,6 @@ export default {
       this.reportedPosts = result.posts;
 
       this.isLoading = false;
-    },
-
-    async deleteAccount() {
-      const headers = setHeaders();
-
-      const response = await fetch(
-        `${this.API_URL}/users/${this.$store.getters.user.uuid}`,
-        {
-          method: 'DELETE',
-          headers,
-        }
-      );
-
-      console.log(response);
-
-      if (!response.ok) {
-        console.log('Impossible de supprimer le compte');
-        return;
-      }
-
-      await this.$store.dispatch('logout');
-      await this.$router.push({
-        name: 'Signin',
-        query: { accountDeleted: true },
-      });
-    },
-
-    async updateProfile() {
-      const newProfile = new FormData();
-
-      if (this.user.email !== this.$store.getters.user.email) {
-        newProfile.append('email', this.user.email);
-      }
-
-      if (this.user.role !== this.$store.getters.user.role) {
-        newProfile.append('role', this.user.role);
-      }
-
-      if (this.image) {
-        newProfile.append('image', this.image);
-      }
-
-      newProfile.append('uid', this.$store.getters.user.uuid);
-
-      const headers = setHeaders();
-
-      const response = await fetch(
-        `${this.API_URL}/users/${this.$store.getters.user.uuid}`,
-        {
-          method: 'PUT',
-          body: newProfile,
-          headers,
-        }
-      );
-
-      if (!response.ok) {
-        console.log('Impossible de mettre à jour le profil');
-        return;
-      }
-
-      const result = await response.json();
-
-      await this.$store.dispatch('updateUser', result.user);
-
-      this.saved = true;
     },
 
     async deletePost(uuid) {
@@ -397,7 +309,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .avatar-action {
   background-color: rgba(0, 0, 0, 0.4);
 }
