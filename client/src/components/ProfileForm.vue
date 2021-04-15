@@ -27,7 +27,9 @@
             type="file"
             id="image"
           />
-          <div class="form-text">Formats: jpg, jpeg, png. Max: 180x180px</div>
+          <div class="form-text fst-italic">
+            Formats acceptés: jpg, jpeg, png.
+          </div>
         </div>
         <div class="mb-3">
           <label for="lastName" class="form-label">Nom</label>

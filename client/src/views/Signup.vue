@@ -83,9 +83,7 @@
                 }}</span>
               </div>
               <div class="mb-4">
-                <label for="password" class="form-label"
-                  >Mot de passe (8 caractères minimum)</label
-                >
+                <label for="password" class="form-label">Mot de passe</label>
                 <input
                   @focus="
                     {
@@ -100,6 +98,7 @@
                   class="form-control form-control-lg"
                   :class="errors.password ? 'is-invalid' : ''"
                 />
+                <div class="form-text fst-italic">8 caractères minimum</div>
                 <span v-if="errors.password" class="invalid-feedback">{{
                   errors.password
                 }}</span>
