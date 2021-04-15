@@ -22,6 +22,8 @@
             @deletePost="deleteFromFeed"
             @reportPost="markReportedPost"
             @reloadPost="reloadPost"
+            @addLike="addUserLike"
+            @addDislike="addUserDislike"
           />
         </div>
       </div>
@@ -56,10 +58,46 @@ export default {
   },
 
   methods: {
+    addUserLike(uuid) {
+      const currentUser = this.$store.getters.user.uuid;
+      this.posts.map((post) => {
+        if (post.uuid === uuid) {
+          if (!post.votes.usersLiked.includes(currentUser)) {
+            if (post.votes.usersDisliked.includes(currentUser)) {
+              post.votes.usersDisliked = post.votes.usersDisliked.filter(
+                (user) => user !== currentUser
+              );
+            }
+            post.votes.usersLiked.push(currentUser);
+          }
+        }
+      });
+    },
+
+    addUserDislike(uuid) {
+      const currentUser = this.$store.getters.user.uuid;
+      this.posts.map((post) => {
+        if (post.uuid === uuid) {
+          if (!post.votes.usersDisliked.includes(currentUser)) {
+            if (post.votes.usersLiked.includes(currentUser)) {
+              post.votes.usersLiked = post.votes.usersLiked.filter(
+                (user) => user !== currentUser
+              );
+            }
+            post.votes.usersDisliked.push(currentUser);
+          }
+        }
+      });
+    },
+
     updateFeed(data) {
       const newPost = {
         ...data,
         author: this.$store.getters.user,
+        votes: {
+          usersLiked: [],
+          usersDisliked: [],
+        },
       };
 
       this.posts = [newPost, ...this.posts];
@@ -104,6 +142,8 @@ export default {
     const data = await response.json();
 
     this.posts = data.posts;
+
+    console.log(data.posts[0]);
 
     this.isLoading = false;
   },

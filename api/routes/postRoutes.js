@@ -26,4 +26,8 @@ router.get('/:uuid/report', tokenValidation, postController.report);
 
 router.get('/:uuid/restore', tokenValidation, postController.restore);
 
+router.post('/:uuid/like', tokenValidation, postController.like);
+
+router.post('/:uuid/dislike', tokenValidation, postController.dislike);
+
 module.exports = router;

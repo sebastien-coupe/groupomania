@@ -1,11 +1,11 @@
-const { Post, User, Comment } = require('../models');
+const { Post, User, Comment, Vote } = require('../models');
 const fs = require('fs/promises');
 
 exports.findAll = async ctx => {
   const { filter } = ctx.query;
 
   const query = {
-    include: 'author',
+    include: ['author', 'votes'],
     order: [['createdAt', 'DESC']]
   }
 
@@ -57,6 +57,12 @@ exports.create = async ctx => {
     userId: user.id,
     imageUrl
   });
+
+  const vote = await Vote.create({
+    postId: createdPost.id,
+    usersLiked: [],
+    usersDisliked: []
+  })
 
   if (!createdPost) ctx.throw(500, 'Database error saving new post')
 
@@ -236,4 +242,66 @@ exports.addComment = async ctx => {
     status: 'success',
     comment: createdComment
   }
+}
+
+exports.like = async ctx => {
+  const { userId } = ctx.request.body;
+  const { uuid } = ctx.params;
+
+  const post = await Post.findOne({
+    where: {
+      uuid
+    }
+  })
+
+  const vote = await Vote.findOne({
+    where: {
+      postId: post.id
+    }
+  });
+
+  if (!vote.usersLiked.includes(userId)) {
+    if (vote.usersDisliked.includes(userId)) {
+      vote.usersDisliked = vote.usersDisliked.filter(user => user !== userId);
+    }
+    vote.usersLiked = [...vote.usersLiked, userId]
+  }
+
+
+  const saved = await vote.save();
+
+  ctx.body = {
+    votes: saved
+  }
+}
+
+exports.dislike = async ctx => {
+  const { userId } = ctx.request.body;
+  const { uuid } = ctx.params;
+
+  const post = await Post.findOne({
+    where: {
+      uuid
+    }
+  })
+
+  const vote = await Vote.findOne({
+    where: {
+      postId: post.id
+    }
+  });
+
+  if (!vote.usersDisliked.includes(userId)) {
+    if (vote.usersLiked.includes(userId)) {
+      vote.usersLiked = vote.usersLiked.filter(user => user !== userId);
+    }
+    vote.usersDisliked = [...vote.usersDisliked, userId]
+  }
+
+  const saved = await vote.save();
+
+  ctx.body = {
+    votes: saved
+  }
+
 }

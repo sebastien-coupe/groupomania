@@ -83,15 +83,35 @@
       class="d-flex align-items-center px-3 pb-3 pt-4"
     >
       <!-- TODO: Make it dynamic -->
-
-      <div class="mx-auto mb-2">
+      <div class="flex-shrink-none mb-2">
         <button
-          @click="toggleComments(post.uuid)"
-          class="btn btn-link btn-sm text-decoration-none"
+          @click="addLike(post.uuid)"
+          type="button"
+          class="btn btn-outline-success btn-sm"
+          :disabled="post.votes.usersLiked.includes($store.getters.user.uuid)"
         >
-          {{ showComments ? 'Masquer' : 'Afficher' }} les commentaires
+          <i class="bi bi-arrow-up-short"></i>
+        </button>
+        <button
+          @click="addDislike(post.uuid)"
+          type="button"
+          class="btn btn-outline-danger btn-sm ms-1"
+          :disabled="
+            post.votes.usersDisliked.includes($store.getters.user.uuid)
+          "
+        >
+          <i class="bi bi-arrow-down-short"></i>
         </button>
       </div>
+      <div class="mx-3 small text-secondary text-success mb-2">
+        {{ post.votes.usersLiked.length - post.votes.usersDisliked.length }}
+      </div>
+      <button
+        @click="toggleComments(post.uuid)"
+        class="btn btn-link btn-sm ms-auto text-decoration-none"
+      >
+        {{ showComments ? 'Masquer' : 'Afficher' }} les commentaires
+      </button>
       <!-- END TODO -->
     </div>
     <CommentList
@@ -116,7 +136,7 @@ moment.locale('fr');
 export default {
   name: 'Post',
 
-  emits: ['deletePost', 'reportPost', 'reloadPost'],
+  emits: ['deletePost', 'reportPost', 'reloadPost', 'addLike', 'addDislike'],
 
   inject: ['API_URL'],
 
@@ -137,6 +157,44 @@ export default {
   },
 
   methods: {
+    async addLike(uuid) {
+      const headers = setHeaders({ json: true });
+
+      const response = await fetch(`${this.API_URL}/posts/${uuid}/like`, {
+        method: 'POST',
+        body: JSON.stringify({ userId: this.$store.getters.user.uuid }),
+        headers,
+      });
+
+      if (!response.ok) {
+        console.log("Impossible d'ajouter un like");
+        return;
+      }
+
+      console.log('Done');
+
+      this.$emit('addLike', uuid);
+    },
+
+    async addDislike(uuid) {
+      const headers = setHeaders({ json: true });
+
+      const response = await fetch(`${this.API_URL}/posts/${uuid}/dislike`, {
+        method: 'POST',
+        body: JSON.stringify({ userId: this.$store.getters.user.uuid }),
+        headers,
+      });
+
+      if (!response.ok) {
+        console.log("Impossible d'ajouter un like");
+        return;
+      }
+
+      console.log('Done');
+
+      this.$emit('addDislike', uuid);
+    },
+
     formatDate(date) {
       return moment(date).fromNow();
     },

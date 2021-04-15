@@ -1,33 +1,34 @@
 'use strict';
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Votes', {
+  up: async (queryInterface, DataTypes) => {
+    await queryInterface.createTable('votes', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: DataTypes.INTEGER
       },
       postId: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: DataTypes.INTEGER
       },
       usersLiked: {
-        type: Sequelize.JSON
+        type: DataTypes.JSON
       },
       usersDisliked: {
-        type: Sequelize.JSON
+        type: DataTypes.JSON
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: DataTypes.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: DataTypes.DATE
       }
     });
   },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Votes');
+  down: async (queryInterface, DataTypes) => {
+    await queryInterface.dropTable('votes');
   }
 };
