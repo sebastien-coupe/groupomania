@@ -1,5 +1,6 @@
 const { Post, User, Comment, Vote } = require('../models');
 const fs = require('fs/promises');
+const post = require('../models/post');
 
 exports.findAll = async ctx => {
   const { filter } = ctx.query;
@@ -133,6 +134,12 @@ exports.delete = async ctx => {
       postId: postToDelete.id
     }
   });
+
+  const _deletedVotes = await Vote.destroy({
+    where: {
+      postId: postToDelete.id
+    }
+  })
 
   const deletedPost = await Post.destroy({
     where: {

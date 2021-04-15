@@ -35,7 +35,7 @@ CREATE TABLE `SequelizeMeta` (
 
 LOCK TABLES `SequelizeMeta` WRITE;
 /*!40000 ALTER TABLE `SequelizeMeta` DISABLE KEYS */;
-INSERT INTO `SequelizeMeta` VALUES ('20210317120025-create-user.js'),('20210318140516-create-post.js'),('20210410132931-create-comment.js');
+INSERT INTO `SequelizeMeta` VALUES ('20210317120025-create-user.js'),('20210318140516-create-post.js'),('20210410132931-create-comment.js'),('20210415095656-create-vote.js');
 /*!40000 ALTER TABLE `SequelizeMeta` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -55,7 +55,7 @@ CREATE TABLE `comments` (
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,6 +64,7 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
+INSERT INTO `comments` VALUES (1,'f537375d-afb0-45ad-82a2-c5706bdfb7c2','Heureuse d\'y avoir contribué. Très fière du résultat :)',5,1,'2021-04-15 13:05:03','2021-04-15 13:05:03'),(2,'d7c52921-991d-46a6-8aa7-cab38c423c90','Bienvenue Elliot !',5,4,'2021-04-15 13:06:21','2021-04-15 13:06:21');
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -93,7 +94,7 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (1,'b45588fa-9136-4468-bb26-d84c53d12af5','Premier inscrit sur Groupomania. Hâte d\'accueillir les collègues :)','',0,2,'2021-04-14 13:59:10','2021-04-14 13:59:10'),(2,'a3e7a1f1-9e9b-4692-849d-d242a47a2878','Passage en revue de mon dernier projet, j\'attends l\'avis de mon mentor...','http://localhost:3000/public/uploads/pexels_david_mceachan_90333_1618408852954.jpg',0,2,'2021-04-14 14:00:52','2021-04-14 14:00:52'),(3,'0bffa6bd-816d-4ad9-bb6c-edafd7663d9a','Hello tout le monde, moi c\'est Elliot. Je suis la nouvelle recrue au département sécurité chez Groupomania. A bientôt!','',0,3,'2021-04-14 14:04:55','2021-04-14 14:04:55'),(4,'38a15d36-8dd1-48b9-95b5-7030dfbec090','Je vous annonce que je vais bientôt quitter la boîte et vous informe que j\'ai l\'intention de rapatrier toute la clientèle que je gère chez mon nouvel employeur. Adieu!','',1,4,'2021-04-14 15:07:23','2021-04-14 15:08:48'),(5,'bd40291d-7031-4135-b477-cb626d8d0116','En train de faire signer mes clients chez la concurrence...','http://localhost:3000/public/uploads/pexels_helena_lopes_696218_1618412911790.jpg',1,4,'2021-04-14 15:08:31','2021-04-14 15:08:51');
+INSERT INTO `posts` VALUES (1,'6f1b2b33-8b73-4dc0-81d4-24361ee5b237','Après quelques semaines de travail, Groupomania et moi-même sommes heureux de vous annoncer le lancement de ce nouveau réseau social!','http://localhost:3000/public/uploads/pexels_rovenimagescom_949592_1618490861233.jpg',0,2,'2021-04-15 12:47:41','2021-04-15 12:47:41'),(2,'42dc18ff-a60e-43a0-a9bd-c1ac578d5e44','Hé bien moi j\'en profite pour vous annoncer que je quitte la boîte pour aller signer chez la concurrence. Oh et bien entendu j\'emmène toute ma clientèle avec!','',1,3,'2021-04-15 12:50:48','2021-04-15 13:05:33'),(3,'07e96a9c-8160-4c2a-84a6-574a45380218','Mon futur bureau: (Et je vous parle même pas du salaire).','http://localhost:3000/public/uploads/pexels_huseyn_kamaladdin_667838_1618491155816.jpg',1,3,'2021-04-15 12:52:35','2021-04-15 13:05:27'),(4,'c847c0cc-abf3-4cc3-9d9f-6c73eef76343','Salut, moi c\'est Elliot, je viens de rejoindre le département sécurité de l\'entreprise. Je compte y apporter mon expertise et me nourrir de celle de ma nouvelle équipe. Hâte d\'échanger avec vous. A bientôt.','',0,4,'2021-04-15 12:56:20','2021-04-15 12:56:20'),(5,'baf1ff63-49a6-47e3-a5ee-a4b421eea6f4','Hello, un poste de consulant UI/UX vient de se libérer dans mon équipe, n\'hésitez pas à faire tourner l\'info autour de vous. Merci.','',0,5,'2021-04-15 13:09:02','2021-04-15 13:09:27');
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -118,7 +119,7 @@ CREATE TABLE `users` (
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -127,8 +128,36 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'72ee9216-d4dd-4a86-8018-b83bcf31ca1a','John','Doe','john.doe@groupomania.com','$2b$10$gCXy7ci8Rhq8r0EjuAcOGeNmp5.VJk.ThBsuMO5WWegxxN36CSKEa','Chef de projet','http://localhost:3000/public/avatars/default/j.png',1,'2021-04-14 13:49:45','2021-04-14 13:51:32'),(2,'65da788c-ba15-4b4d-8a17-feb7dffb1138','Sebastien','Coupe','sebastien@gmail.com','$2b$10$8GUpYRGLalIbDPQ.ePFdkem1sm5HcIt3Nut5iDBcFjtFN3sm1YuIi','Développeur Web','http://localhost:3000/public/avatars/avatar_me_1618408675675.jpg',0,'2021-04-14 13:57:21','2021-04-14 13:57:55'),(3,'d436afc0-5982-4f2b-bcdd-84de884d51a4','Elliot','Alderson','eliott@gmail.com','$2b$10$plk9xJMiodRl/7L/Xqucl.RsN3tMpGWCfud4aDNcSJUiMa64yD8iq','Expert en sécurité','http://localhost:3000/public/avatars/avatar_mr_robot_elliot_180x180_1618409154005.jpg',0,'2021-04-14 14:02:39','2021-04-14 14:07:56'),(4,'30fc9b88-da2d-40d4-82f4-3064d9679a1f','Christophe','Blanchard','christophe@gmail.com','$2b$10$/nZh3cQ77ENDMf6QlSqdCOCI16LUcMeKb7ATy0WMU.tyTJikYt9Py','Commercial','http://localhost:3000/public/avatars/default/c.png',0,'2021-04-14 15:03:54','2021-04-14 15:04:16');
+INSERT INTO `users` VALUES (1,'b186b196-1784-47a9-9343-4d304159fc46','John','Doe','john.doe@groupomania.com','$2b$10$SCyIMCeCYgsL7.yEpP5cpuPKelpxA2/g2rc478pGdwvdLlaQMwTyW','Collaborateur Groupomania','http://localhost:3000/public/avatars/default/j.png',1,'2021-04-15 12:43:41','2021-04-15 12:43:41'),(2,'ea0ee37d-c655-43d8-b159-bd24c45a4f8d','Sebastien','Coupe','sebastien@gmail.com','$2b$10$G2DlF/JcIzNMr4rrIjn5U.gVhDoA7XDz5YNcHXgoN1Rl0texJwf1y','Développeur Fullstack','http://localhost:3000/public/avatars/avatar_me_1618490784346.jpg',0,'2021-04-15 12:45:49','2021-04-15 12:46:24'),(3,'09c0f850-a427-4f9c-a4b1-010b7b2df4e3','Christophe','Blanchard','christophe@gmail.com','$2b$10$RujSfPGkwd5Kqt9TUXsDr.ibs71LP6msKg/cjT.w8kkOigE5yFl.u','Commercial','http://localhost:3000/public/avatars/default/c.png',0,'2021-04-15 12:49:28','2021-04-15 12:50:56'),(4,'ade80b7f-c3bd-4767-b0af-03acfb98087b','Elliot','Alderson','elliot@gmail.com','$2b$10$lIaH/xN9F3V4arNhxuog1.awDOzo4bh5ZAJyDggGJ4HgdQ7s4ckKe','Consultant en sécurité','http://localhost:3000/public/avatars/avatar_mr_robot_elliot_180x180_1618491270091.jpg',0,'2021-04-15 12:53:24','2021-04-15 12:54:30'),(5,'edb07fcc-c1fc-46d3-a792-8963c195a5ec','Mylène','Bates','mylene@gmail.com','$2b$10$IKir4czg5gtw/hYApd1fmechnWYILbfZSZFa7yUFC./8w/Jar/O3a','Webdesigner','http://localhost:3000/public/avatars/avatar_mylene_1618491854206.jpg',0,'2021-04-15 13:03:55','2021-04-15 13:04:14');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `votes`
+--
+
+DROP TABLE IF EXISTS `votes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `votes` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `postId` int NOT NULL,
+  `usersLiked` json DEFAULT NULL,
+  `usersDisliked` json DEFAULT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `votes`
+--
+
+LOCK TABLES `votes` WRITE;
+/*!40000 ALTER TABLE `votes` DISABLE KEYS */;
+INSERT INTO `votes` VALUES (1,1,'[\"ea0ee37d-c655-43d8-b159-bd24c45a4f8d\", \"edb07fcc-c1fc-46d3-a792-8963c195a5ec\"]','[]','2021-04-15 12:47:41','2021-04-15 13:04:20'),(2,2,'[]','[\"edb07fcc-c1fc-46d3-a792-8963c195a5ec\"]','2021-04-15 12:50:48','2021-04-15 13:05:13'),(3,3,'[]','[\"edb07fcc-c1fc-46d3-a792-8963c195a5ec\"]','2021-04-15 12:52:36','2021-04-15 13:05:10'),(4,4,'[\"edb07fcc-c1fc-46d3-a792-8963c195a5ec\"]','[]','2021-04-15 12:56:21','2021-04-15 13:06:23'),(5,5,'[]','[]','2021-04-15 13:09:02','2021-04-15 13:09:02');
+/*!40000 ALTER TABLE `votes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -140,4 +169,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-14 15:43:37
+-- Dump completed on 2021-04-15 13:19:15
