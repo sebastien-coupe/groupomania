@@ -11,6 +11,7 @@ const app = new Koa();
 // Routers
 const authRouter = require('./routes/authRoutes');
 const postRouter = require('./routes/postRoutes');
+const commentRouter = require('./routes/commentRoutes');
 const userRouter = require('./routes/userRoutes');
 
 app.use(errorHandler);
@@ -34,6 +35,10 @@ app
 app
   .use(postRouter.routes())
   .use(postRouter.allowedMethods());
+
+app
+  .use(commentRouter.routes())
+  .use(commentRouter.allowedMethods());
 
 app
   .use(userRouter.routes())
