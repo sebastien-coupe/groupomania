@@ -13,6 +13,7 @@
           :key="comment.uuid"
           :postId="postId"
           :comment="comment"
+          @deletedComment="removeComment"
         />
       </div>
     </div>
@@ -36,6 +37,10 @@ export default {
   methods: {
     addComment(data) {
       this.$emit('addComment', data);
+    },
+
+    removeComment(uuid) {
+      this.$emit('removeFromCommentsList', uuid);
     },
   },
 };

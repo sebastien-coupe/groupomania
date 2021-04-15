@@ -98,6 +98,7 @@
       :comments="comments"
       :postId="post.uuid"
       @addComment="updateCommentList"
+      @removeFromCommentsList="removeComment"
       v-if="showComments"
     />
   </div>
@@ -169,6 +170,12 @@ export default {
         author: this.$store.getters.user,
       };
       this.comments = [newComment, ...this.comments];
+    },
+
+    removeComment(uuid) {
+      this.comments = [
+        ...this.comments.filter((comment) => comment.uuid !== uuid),
+      ];
     },
 
     async deleteItem(post) {
