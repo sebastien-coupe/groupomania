@@ -17,10 +17,10 @@ git clone https://github.com/sebastien-coupe/groupomania.git groupomania
 
 ## 2. Mise en place de la base de données
 
-Si vous le souhaitez, un fichier `docker-compose.yml` est présent dans le dossier `db`, pour le mettre en place, lancez la commande suivante:
+Si vous le souhaitez, un fichier `docker-compose.yml` est présent dans le dossier `db`, pour le mettre en place, vous devez d'abord copier le fichier `env.db` fourni dans les livrables dans ce dossier et le renommer en `.env` puis ensuite lancer docker depuis ce même dossier:
 
 ```
-cd db && docker-compose up
+docker-compose up
 ```
 
 Importez le fichier `groupomania.sql` dans mysql:
