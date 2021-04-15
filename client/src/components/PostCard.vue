@@ -87,7 +87,12 @@
         <button
           @click="addLike(post.uuid)"
           type="button"
-          class="btn btn-outline-success btn-sm"
+          class="btn btn-sm"
+          :class="
+            post.votes.usersLiked.includes($store.getters.user.uuid)
+              ? 'btn-success'
+              : 'btn-outline-success'
+          "
           :disabled="post.votes.usersLiked.includes($store.getters.user.uuid)"
         >
           <i class="bi bi-arrow-up-short"></i>
@@ -95,7 +100,12 @@
         <button
           @click="addDislike(post.uuid)"
           type="button"
-          class="btn btn-outline-danger btn-sm ms-1"
+          class="btn btn-sm ms-1"
+          :class="
+            post.votes.usersDisliked.includes($store.getters.user.uuid)
+              ? 'btn-danger'
+              : 'btn-outline-danger'
+          "
           :disabled="
             post.votes.usersDisliked.includes($store.getters.user.uuid)
           "
@@ -103,8 +113,22 @@
           <i class="bi bi-arrow-down-short"></i>
         </button>
       </div>
-      <div class="mx-3 small text-secondary text-success mb-2">
-        {{ post.votes.usersLiked.length - post.votes.usersDisliked.length }}
+      <div
+        v-if="getTotalVotes(post) === 0"
+        class="mx-3 small text-secondary mb-2"
+      >
+        0 vote
+      </div>
+      <div
+        v-else-if="getTotalVotes(post) > 0"
+        class="mx-3 small text-success mb-2"
+      >
+        {{ getTotalVotes(post) }}
+        {{ getTotalVotes(post) > 1 ? 'votes' : 'vote' }}
+      </div>
+      <div v-else class="mx-3 small text-secondary text-danger mb-2">
+        {{ getTotalVotes(post) }}
+        {{ -1 > getTotalVotes(post) ? 'votes' : 'vote' }}
       </div>
       <button
         @click="toggleComments(post.uuid)"
@@ -171,8 +195,6 @@ export default {
         return;
       }
 
-      console.log('Done');
-
       this.$emit('addLike', uuid);
     },
 
@@ -189,8 +211,6 @@ export default {
         console.log("Impossible d'ajouter un like");
         return;
       }
-
-      console.log('Done');
 
       this.$emit('addDislike', uuid);
     },
@@ -301,6 +321,17 @@ export default {
       const result = await response.json();
 
       this.comments = result.comments;
+    },
+
+    getTotalVotes(post) {
+      return post.votes.usersLiked.length - post.votes.usersDisliked.length;
+    },
+
+    checkVotes(post) {
+      if (this.getTotalVotes(post) >= 0) {
+        return true;
+      }
+      return false;
     },
   },
 };

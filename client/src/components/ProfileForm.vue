@@ -144,7 +144,6 @@ export default {
         return;
       }
       this.updated = false;
-      console.log(this.updated);
     },
 
     preloadImage() {
@@ -173,8 +172,6 @@ export default {
           headers,
         }
       );
-
-      console.log(response);
 
       if (!response.ok) {
         console.log('Impossible de supprimer le compte');

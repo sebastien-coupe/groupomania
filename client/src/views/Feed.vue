@@ -143,8 +143,6 @@ export default {
 
     this.posts = data.posts;
 
-    console.log(data.posts[0]);
-
     this.isLoading = false;
   },
 };
