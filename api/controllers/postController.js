@@ -88,6 +88,12 @@ exports.update = async ctx => {
     }
   });
 
+  const vote = await Vote.findOne({
+    where: {
+      postId: post.id
+    }
+  })
+
   if (update.delImg) {
     const associatedImageFile = post.imageUrl ? post.imageUrl.split('/uploads/')[1] : null;
 
@@ -108,9 +114,11 @@ exports.update = async ctx => {
 
   const updatedPost = await post.save();
 
+  newPost = { ...updatedPost.dataValues, votes: vote };
+
   ctx.body = {
     status: 'success',
-    post: updatedPost
+    post: newPost
   }
 }
 

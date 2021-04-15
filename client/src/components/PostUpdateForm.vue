@@ -137,6 +137,8 @@ export default {
 
       const result = await response.json();
 
+      console.log(result);
+
       this.$emit('updatePost', result.post);
       this.toggleUpdateForm();
     },
