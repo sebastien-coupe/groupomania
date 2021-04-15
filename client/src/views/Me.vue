@@ -129,8 +129,8 @@ export default {
 }
 
 .avatar-container {
-  width: 180px;
-  height: 180px;
+  width: 120px;
+  height: 120px;
   overflow: hidden;
 }
 

@@ -81,6 +81,16 @@ exports.update = async ctx => {
     }
   });
 
+  if (update.delImg) {
+    const associatedImageFile = post.imageUrl ? post.imageUrl.split('/uploads/')[1] : null;
+
+    if (associatedImageFile) {
+      await fs.unlink(`public/uploads/${associatedImageFile}`);
+      post.imageUrl = '';
+    }
+
+  }
+
   if (update.body && update.body !== "") {
     post.body = update.body
   }
@@ -88,21 +98,6 @@ exports.update = async ctx => {
   if (imageUrl !== '') {
     post.imageUrl = imageUrl
   }
-
-  console.log('supprimer l\'image ? ', update.delImg)
-
-  if (update.delImg === true) {
-    const associatedImageFile = post.imageUrl ? post.imageUrl.split('/uploads/')[1] : null;
-
-    if (associatedImageFile) {
-      await fs.unlink(`public/uploads/${associatedImageFile}`);
-    }
-
-    post.imageUrl = '';
-  }
-
-  console.log(post)
-
 
   const updatedPost = await post.save();
 

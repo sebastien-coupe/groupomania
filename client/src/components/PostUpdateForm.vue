@@ -33,7 +33,7 @@
         type="file"
         id="image"
       />
-      <div v-if="!imagePreview && post.imageUrl && !deleteImage" class="mt-2">
+      <div v-if="!imagePreview && post.imageUrl && !deleteImage" class="mt-4">
         <div class="position-relative w-25">
           <img
             :src="post.imageUrl"
@@ -41,13 +41,10 @@
             alt="preview"
           />
           <div class="image-action">
-            <button
+            <i
               @click="removeImage"
-              class="btn btn-danger btn-sm m-auto"
-              title="Supprimer l'image"
-            >
-              <i class="bi bi-x-circle"></i>
-            </button>
+              class="btn-remove bi bi-x-circle-fill text-danger fs-5"
+            ></i>
           </div>
         </div>
       </div>
@@ -111,6 +108,7 @@ export default {
 
     removeImage() {
       this.deleteImage = true;
+      console.log('removed!');
     },
 
     async submitForm() {
@@ -156,18 +154,17 @@ export default {
 
 <style>
 .image-action {
-  display: flex;
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: rgba(255, 255, 255, 0.6);
-  opacity: 0;
-  transition: opacity 0.15s ease-in-out;
 }
 
-.image-action:hover {
-  opacity: 1;
+.btn-remove {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  cursor: pointer;
 }
 </style>

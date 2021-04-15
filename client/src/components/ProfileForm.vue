@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="updateProfile">
     <div class="row align-items-start">
-      <div class="col-4">
+      <div class="col-12 col-sm-4">
         <div class="d-flex justify-content-center mt-3">
           <div class="avatar-container">
             <img
@@ -12,11 +12,11 @@
           </div>
         </div>
       </div>
-      <div class="col-8">
+      <div class="col-12 col-sm-8">
         <div v-if="saved" class="alert alert-success mt-2">
           Profil mis à jour avec succès.
         </div>
-        <div class="mb-3">
+        <div class="mb-3 mt-3 mt-sm-0">
           <label for="lastName" class="form-label"
             >Utiliser un avatar personalisé</label
           >
@@ -73,7 +73,10 @@
           >
             Supprimer mon compte
           </button>
-          <button :disabled="!updated" class="btn btn-primary btn-sm">
+          <button
+            :disabled="!updated"
+            class="btn btn-primary btn-sm ms-3 ms-sm-0"
+          >
             Mettre à jour
           </button>
         </div>
